@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Amostra } from 'src/modal/amostra';
 import { Analise } from 'src/modal/analise';
+import { Atributo } from 'src/modal/atributo';
 import { fileURLToPath, pathToFileURL } from 'url';
 
 @Injectable({
@@ -61,7 +62,12 @@ export class AnaliseService {
         });
     }
 
-
+    listarAtributos() {  
+        return new Promise<Atributo[]>((resolve, reject) => {
+            this.http.get<Atributo[]>(this.server + "/analise.php", { params: { listarAtributos: 'a'} }).
+                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
+        });
+    }
 
 
 

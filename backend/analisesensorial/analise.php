@@ -24,6 +24,8 @@ switch ($method) {
             getRespostaByCodigo();
         } else if (isset($_GET['getAnaliseByCodigo'])) {
             getAnaliseByCodigo();
+        } else if (isset($_GET['listarAtributos'])) {
+            listarAtributos();
         }
 
         break;
@@ -33,6 +35,19 @@ switch ($method) {
     default:
         echo '{"error": "Método inválido"}';
         break;
+}
+
+function listarAtributos()
+{
+    try {
+        $sql = "SELECT * FROM atributo_padrao WHERE id_atributo_padrao NOT IN (1, 5)";
+        $bdpdo = BDPDO::getInstancia();
+        $p_sql = $bdpdo->prepare($sql);
+        $p_sql->execute();
+        echo json_encode($p_sql->fetchAll(PDO::FETCH_OBJ));
+    } catch (Exception $e) {
+        print "Erro ao executar a função de listarTodos" . $e->getMessage();
+    }
 }
 
 function getAnaliseById()
@@ -126,8 +141,8 @@ function getRespostaByCodigo()
             while ($linha_testes) {
                 $sql = "SELECT ap.*, at.*, (0) AS valor FROM atributo_teste AS at
                 JOIN atributo_padrao AS ap ON ap.id_atributo_padrao = at.fk_atributo_padrao 
-                WHERE at.fk_analise_teste = ".$linha_testes["id_analise_teste"].
-                " ORDER BY ap.ordem_atributo";
+                WHERE at.fk_analise_teste = " . $linha_testes["id_analise_teste"] .
+                    " ORDER BY ap.ordem_atributo";
                 $p_sql2 = $bdpdo->prepare($sql);
                 $p_sql2->execute();
 

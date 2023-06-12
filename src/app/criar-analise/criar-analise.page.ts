@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { AlertController, LoadingController } from '@ionic/angular';
+import { Atributo } from 'src/modal/atributo';
 import { AnaliseService } from 'src/services/analise.service';
 
 @Component({
@@ -12,6 +13,8 @@ import { AnaliseService } from 'src/services/analise.service';
 })
 export class CriarAnalisePage implements OnInit {
   fGroup: FormGroup;
+  atributos: Array<Atributo>;
+
   foto = "";
   fotos = [];
   err = "";
@@ -30,48 +33,64 @@ export class CriarAnalisePage implements OnInit {
       desc: new FormControl(''),
       atributosHedonica: new FormControl([]),
       atributosCompra: new FormControl([]),
-      aux_atributos: new FormControl(''),
+      aux_atributos: new FormControl(0),
       atributosPreferencia: new FormControl([]),
       atributosComparacao: new FormControl([]),
-      aux_atributos_preferencia: new FormControl(''),
+      aux_atributos_comparacao: new FormControl(0),
       descCompra: new FormControl('Agora avalie quanto à sua atitude de compra'),
       descHedonica: new FormControl('Você está recebendo ---- amostras de -----. Avalie cada amostra e utilize a escala abaixo para identificar o quanto você gostou/desgostou ' +
         'de cada amostra quanto à ----, ----, ----, ---- e ----. Prove as amostras da esquerda para direita.'),
       descPreferencia: new FormControl('Você está recebendo ---- amostras de -----. Por favor, prove as amostras da esquerda para direita e selecione a mais -----.'),
       descComparacao: new FormControl('Você está recebendo ---- amostras de -----. Por favor, prove as amostras da esquerda para direita e selecione a mais -----.'),
     });
+    this.atributos = [];
   }
 
   async ngOnInit() {
     await this.active.params.subscribe(params => {
       this.idUser = params["id_user"];
     });
+    this.listarAtributos();
   }
 
-  alterar_atributos() {
-    this.fGroup.value.atributosHedonica.splice(0, this.fGroup.value.atributosHedonica.length);
-    let aux = this.fGroup.value.aux_atributos;
-    if (aux.length > 0) {
-      aux.split(', ').forEach(el => {
-        this.fGroup.value.atributosHedonica.push({
-          display: el,
-          value: el
-        });
-      });
-    }
+  async listarAtributos() {
+    let load = await this.loadingCtrl.create({
+      message: 'Carregando',
+    });
+    load.present();
+    await this.analiseService.listarAtributos().then(data => {
+      console.log(data);
+      if (data) {
+        this.atributos = data;
+      }
+      load.dismiss();
+    }, err => {
+      load.dismiss();
+    });
   }
 
-  alterar_atributos_preferencia() {
-    this.fGroup.value.atributosPreferencia.splice(0, this.fGroup.value.atributosPreferencia.length);
-    let aux = this.fGroup.value.aux_atributos_preferencia;
-    if (aux.length > 0) {
-      aux.split(', ').forEach(el => {
-        this.fGroup.value.atributosPreferencia.push({
-          display: el,
-          value: el
-        });
-      });
-    }
+  salvar_atributo_hedonica() {
+    let aux = parseInt(this.fGroup.value.aux_atributos);
+    this.fGroup.value.atributosHedonica.push({
+      display: this.atributos[aux].nome_atributo,
+      value: this.atributos[aux].id_atributo_padrao
+    });
+  }
+
+  removerAtributoHed(indice) {
+    this.fGroup.value.atributosHedonica.splice(indice, 1);
+  }
+
+  removerAtributoComp(indice) {
+    this.fGroup.value.atributosComparacao.splice(indice, 1);
+  }
+
+  alterar_atributos_comparacao() {
+    let aux = parseInt(this.fGroup.value.aux_atributos_comparacao);
+    this.fGroup.value.atributosComparacao.push({
+      display: this.atributos[aux].nome_atributo,
+      value: this.atributos[aux].id_atributo_padrao
+    });
 
   }
 
@@ -96,56 +115,9 @@ export class CriarAnalisePage implements OnInit {
     if (this.fGroup.valid &&
       ((this.fGroup.value.hedonica && this.fGroup.value.descHedonica != '' && this.fGroup.controls.atributosHedonica.value.length > 0)
         || (this.fGroup.value.compra && this.fGroup.value.descCompra != '') ||
-        (this.fGroup.value.preferencia && this.fGroup.value.descPreferencia != '' && this.fGroup.controls.atributosPreferencia.value.length > 0))) {
-      let form = new FormData();
-      var hed;
-      var com;
-      var pref;
-      if (this.fGroup.value.hedonica) {
-        hed = 1;
-      }
-      else {
-        hed = 0;
-      }
-      if (this.fGroup.value.compra) {
-        com = 1;
-      }
-      else {
-        com = 0;
-      }
-      if (this.fGroup.value.preferencia) {
-        pref = 1;
-      }
-
-      else {
-        pref = 0;
-      }
-      form.append("desc", this.fGroup.value.desc);
-      form.append("titulo", this.fGroup.value.titulo);
-      form.append("user", this.idUser);
-      form.append("hedonica", hed);
-      form.append("compra", com);
-      form.append("preferencia", pref);
-      form.append("desc_hed", this.fGroup.value.descHedonica);
-      form.append("desc_com", this.fGroup.value.descCompra);
-      form.append("desc_pref", this.fGroup.value.descPreferencia);
-      if (this.fGroup.value.compra) {
-        this.fGroup.value.atributosCompra = ['Atitude de Compra'];
-      }
-      form.append("atributos-compra", this.fGroup.value.atributosCompra);
-      var atributosH = [];
-      this.fGroup.value.atributosHedonica.forEach(element => {
-        atributosH.push(element["value"]);
-      });
-      this.fGroup.value.atributosHedonica = atributosH;
-      form.append("atributos-hedonica", this.fGroup.value.atributosHedonica);
-
-      var atributosP = [];
-      this.fGroup.value.atributosPreferencia.forEach(element => {
-        atributosP.push(element["value"]);
-      });
-      this.fGroup.value.atributosPreferencia = atributosP;
-      form.append("atributos-preferencia", this.fGroup.value.atributosPreferencia);
+        (this.fGroup.value.preferencia && this.fGroup.value.descPreferencia != '') ||
+        (this.fGroup.value.comparacao && this.fGroup.value.descComparacao != '' && this.fGroup.controls.atributosComparacao.value.length > 0))) {
+      console.log()
 
       let idAnalise;
       let load = await this.loadingCtrl.create({
@@ -153,7 +125,7 @@ export class CriarAnalisePage implements OnInit {
       });
       load.present();
 
-      await this.analiseService.saveAnalise(form).then(res => {
+      /*await this.analiseService.saveAnalise(form).then(res => {
         console.log(res["lastId"])
         let response = (res["lastId"]);
         if (response) {
@@ -163,7 +135,7 @@ export class CriarAnalisePage implements OnInit {
         }
       }).catch(err => {
         console.error(err);
-      });
+      });*/
 
       load.dismiss();
 

@@ -25,6 +25,13 @@ export class UsuarioService {
 
 
 
+    getUser(id) {
+        return new Promise<Usuario>((resolve, reject) => {
+            this.http.get<Usuario>(this.server + "/usuario.php", { params: { getById: <string>id } }).
+                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
+        });
+    }
+    
 
     getAllUsers() {
         return new Promise<any>((resolve, reject) => {
