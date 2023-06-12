@@ -1,0 +1,101 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+.bg-purple {
+    background-color: purple;
+}
+
+.btn {
+    color: var(--ion-color-primary-contrast);
+    background-color: var(--ion-color-primary);
+}
+
+.btn:focus {
+    background-color: var(--ion-color-primary-shade);
+
+}
+
+.icon-bar {
+    font-size: 25px;
+}
+
+.icon-bar:focus {
+    background-color: #f3d6d6ab;
+}
+
+ion-title,
+h1,
+h2,
+h3 {
+    font-family: 'Roboto', sans-serif;
+}
+
+* {
+    font-family: 'Roboto', Arial !important;
+}
+
+ion-content {
+    --background: var(--ion-color-secondary);
+}
+
+small,
+span {
+    font-style: italic;
+}
+
+.alertBtn {
+    color: blue !important;
+    font-style: normal;
+}
+
+.alerta {
+    background-color: rgba(0, 0, 0, 0.267);
+}
+
+.bg-rosa {
+    background-color: #EDC6E5;
+}
+
+.bg-amarelo {
+    background-color: #FFFAB0;
+}
+
+.bg-azul {
+    background-color: #BEF6DB;
+}
+
+.bg-laranja {
+    background-color: #FFCBA9;
+}
+
+.bg-roxo {
+    background-color: #EDC6E5;
+}
+
+.bg-azulE {
+    background-color: #9BE9FF;
+}

@@ -1,0 +1,206 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="sair()" title="Sair">
+        <ion-icon style="font-size: 30px;" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{analise.nome_alimento ? analise.nome_alimento : 'Pesquisar Análise' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goHome()" title="Sair">
+        <ion-icon class="icon-bar" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="secondary">
+  <div *ngIf="escolherAnalise" id="todo">
+    <form class="form-codigo">
+      <div class="form-row">
+        <div class="col-12">
+          <label for="validationTooltip01">Código da análise</label>
+          <input type="text" class="form-control" maxlength="6" (keyup)="getByCode($event)" [(ngModel)]="codigo_analise"
+            name="cod" placeholder="Ex: 42r2d2">
+          <div class="invalid-tooltip">
+            Análise não encontrada !!!
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="tab-pane instrucoes" *ngIf="instrucoes">
+    <div class="form-row text-instrucoes" *ngIf="passos.id == 0">
+      <div class="col-12 ">
+        <strong>Instruções:</strong> <br>
+        {{analise.instrucoes}}
+      </div>
+      <button id="1" class="btn" (click)="instrucoes = false  ">Ok entendi</button>
+    </div>
+
+  </div>
+  <div id="analiseForm" *ngIf="!escolherAnalise && amostras.length > 0 && !instrucoes">
+    <ul class="nav nav-tabs displayNone" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active displayNone" id="tpasso0" data-toggle="tab" href="#passo0" role="tab"
+          aria-controls="passo0" aria-selected="true"></a>
+      </li>
+      <li class="nav-item displayNone" *ngFor="let amostra of amostras; let j = index">
+        <a class="nav-link" id=tpasso{{j+1}} data-toggle="tab" href=#passo{{j+1}} role="tab" aria-selected="false"></a>
+      </li>
+      <li *ngIf="this.preferencia != 0" class="nav-item displayNone">
+        <a class="nav-link" id=tpasso{{amostras.length+1}} data-toggle="tab" href=#passo{{amostras.length+1}} role="tab"
+          aria-selected="false"></a>
+      </li>
+    </ul>
+
+    <form class="needs-validation" novalidate>
+      <div class="tab-content" id="myTabContent">
+
+        <div class="tab-pane fade show active formC" id="passo0" role="tabpanel" aria-labelledby="tpasso0">
+
+          <div class="form-row" *ngIf="passos.id == 0">
+
+            <div class="col-12">
+              <label for="validationTooltip01">Qual é o seu nome?</label>
+              <input type="text" class="form-control" [(ngModel)]="ficha.nome_aluno" name="nome"
+                placeholder="Digite seu nome completo..." required>
+              <div class="valid-tooltip">
+                Looks good!
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="validationTooltip02">Qual sua faixa etária?</label>
+              <select class="custom-select" [(ngModel)]="ficha.faixa_etaria" name="faixa">
+                <option value="">Selecione sua faixa etária</option>
+                <option value="menos de 18 anos">menos de 18 anos</option>
+                <option value="18 a 21 anos">18 a 21 anos</option>
+                <option value="22 a 26 anos">22 a 26 anos</option>
+                <option value="27 a 35 anos">27 a 35 anos</option>
+                <option value="mais de 35 anos">mais de 35 anos</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label for="radioS1">Qual o seu gênero?</label>
+              <select class="custom-select" [(ngModel)]="ficha.genero" name="genero">
+                <option value="">Selecione seu gênero</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Prefiro não responder">Prefiro não responder</option>
+              </select>
+
+            </div>
+
+            <div class="col-12">
+              <label nfIf="" for="validationTooltip02">Com que frequência você consome
+                {{analise.titulo_analise ? analise.titulo_analise : 'undefined' }} ?</label>
+              <select class="custom-select" [(ngModel)]="ficha.frequencia_consumo" name="consumo">
+                <option value="0">Selecione a frequência você consome
+                  {{analise.titulo_analise ? analise.titulo_analise : 'undefined' }}</option>
+                <option value="1">Diariamente</option>
+                <option value="2">1 vez na semana</option>
+                <option value="3">Mensalmente</option>
+                <option value="4">Nunca</option>
+              </select>
+            </div>
+            <div class="col-12"><button id="1" class="proximo btn" (click)="proximo(1)">Próximo</button></div>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade show active" id=passo{{a+1}} role="tabpanel"
+          *ngFor="let amosta of amostras; let a = index; first as isFirst; last as isLast">
+          <div class="form-row formC" *ngIf="passos.id == (a+1)">
+            <div class="col-12">
+              <h3 class="nome">Amostra: {{amosta.numero_amostra}}</h3>
+              <p class="justificar"><strong>Ingredientes</strong><br />{{amosta.ingredientes}}</p>
+            </div>
+
+            <div class="card" *ngFor="let teste of amosta.analise_teste; let i = index">
+              <label *ngIf="teste.id_teste_padrao < 3" class="card-header {{bgs[bg(a)]}}">
+                {{teste.nome_teste}}
+              </label>
+              <div *ngIf="teste.id_teste_padrao < 3" class="card-body">
+                <div class="form-row">
+
+                  <div class="form-group col-md-6" *ngFor="let atributo of teste.atributos; let j = index">
+                    <label for="validationTooltip02">{{atributo.nome_atributo}}</label>
+                    <select class="custom-select" [(ngModel)]="atributo.valor"
+                      name="a" *ngIf="teste.id_teste_padrao == 2">
+                      <option value="0">Escolha uma opção</option>
+                      <option value="5">5. Certamente compraria</option>
+                      <option value="4">4. Provavelmente compraria</option>
+                      <option value="3">3. Tenho dúvida se compraria</option>
+                      <option value="2">2. Provavelmente não compraria</option>
+                      <option value="1">1. Certamente não compraria</option>
+                    </select>
+                    <select class="custom-select" [(ngModel)]="atributo.valor"
+                      name="b" *ngIf="teste.id_teste_padrao == 1">
+                      <option value="0">Escolha uma opção</option>
+                      <option value="9">9. Gostei muitíssimo</option>
+                      <option value="8">8. Gostei muito</option>
+                      <option value="7">7. Gostei moderadamente</option>
+                      <option value="6">6. Gostei ligeiramente</option>
+                      <option value="5">5. Nem gostei / nem desgostei</option>
+                      <option value="4">4. Desgostei ligeiramente</option>
+                      <option value="3">3. Desgostei moderadamente</option>
+                      <option value="2">2. Desgostei muito</option>
+                      <option value="1">1. Desgostei muitíssimo</option>
+                    </select>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-12">
+              <button class="anterior btn" id="{{a}}" (click)="anterior(a)">Anterior </button>
+              <button *ngIf="!isLast || this.preferencia != 0" class="proximo btn" id="{{a+2}}"
+                (click)="proximo(a+2, a)">Próximo</button>
+              <button *ngIf="isLast && !(this.preferencia != 0)" class="btn proximo"
+                (click)="proximo(-1, a)">Finalizar</button>
+            </div>
+
+          </div>
+
+        </div>
+        <div *ngIf="this.preferencia != 0" class="tab-pane fade show active" id=passo{{amostras.length+1}} role="tabpanel">
+          <div class="form-row formC" *ngIf="passos.id == (amostras.length+1)">
+            <div class="col-12">
+              <h3 class="nome">{{respostas[0].preferencia.nome_escala}}</h3>
+              <p class="justificar">{{respostas[0].preferencia.desc_escala}}</p>
+            </div>
+            <div class="card">         
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="form-group col-md-6"
+                    *ngFor="let atributo of respostas[0].preferencia.atributos; let j = index">
+                    <label for="validationTooltip02">{{atributo.nome_atributo}}</label>
+                    <select class="custom-select" [(ngModel)]="respostas[0].preferencia.respostas[j].valor" name="c">
+                      <option value="0">Escolha uma amostra</option>
+                      <option *ngFor="let am of amostras" value={{am.numero_amostra}}>Amostra
+                        {{am.numero_amostra}}</option>
+
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <button class="anterior btn" id="{{amostras.length}}" (click)="anterior(amostras.length)">Anterior
+              </button>
+              <button class="btn proximo" (click)="proximo(-2, amostras.length)">Finalizar</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+
+
+</ion-content>

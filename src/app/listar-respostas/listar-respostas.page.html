@@ -1,0 +1,126 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Respostas</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="goHome()">
+                <ion-icon class="icon-bar" name="home-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="goPerfil()">
+                <ion-icon class="icon-bar" name="person-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="sair()">
+                <ion-icon class="icon-bar" name="exit-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="list-group-item flex-column align-items-start topo-analise">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><strong>{{analise.nome_alimento}}</strong></h5>
+            <small>{{analise.data}}</small>
+        </div>
+
+        <small>{{analise.instrucoes}}</small> <br>
+        <strong>{{analise.nome_usuario}} </strong>
+        <br>
+        <strong>Respostas: {{(amostras[0]?.analise_teste[0]?.fichas.length)==null?0:
+            (amostras[0]?.analise_teste[0]?.fichas.length)}}</strong>
+    </div>
+    <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="segment" color="primary" class="segment">
+        <ion-segment-button value=0>
+            <ion-icon class="segment-label" name="list"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value=1>
+            <ion-icon class="segment-label" name="pie-chart"></ion-icon>
+        </ion-segment-button>
+    </ion-segment>
+    <div *ngIf="segment == 0">
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+                refreshingSpinner="circles" refreshingText="Carregando...">
+            </ion-refresher-content>
+        </ion-refresher>
+
+        <ul class="list-group lista-analises">
+            <!--<div class="card" *ngIf="this.preferencia != 0">
+            <li class="list-group-item {{bgs[bg(0)]}}">{{preferencianalise.nome_escala}}</li>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Faixa etária</th>
+                            <th scope="col">Gênero</th>
+                            <th scope="col">Consumo</th>
+                            <th scope="col" *ngFor=" let atributo of preferencianalise.atributos">
+                                {{atributo.nome_atributo}}
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr *ngFor=" let escalaR of preferencianalise.escala_resposta; let contador = index">
+                            <th scope="row">{{contador+1}}</th>
+                            <td>{{escalaR.nome_aluno}}</td>
+                            <td>{{escalaR.faixa_etaria}}</td>
+                            <td>{{escalaR.genero}}</td>
+                            <td>{{escalaR.frequencia_consumo}}</td>
+                            <td *ngFor=" let resposta of escalaR.respostas">{{respostanalise.valor_resposta}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>-->
+            <div class="card" *ngFor=" let amostra of amostras; let i = index">
+                <li class="list-group-item {{bgs[bg(i)]}}">Amostra {{amostra.numero_amostra}}</li>
+                <img *ngIf="amostra.img_amostra" class="card-img-top" src={{amostra.img_amostra}} onError="this.src='../assets/default.png'"
+                    alt="Card image cap" (click)="imgFull(amostra.img_amostra)">
+                <ul class="card-body">
+                    <li><strong>Número: </strong> {{amostra.numero_amostra}}</li>
+                    <li><strong>Ingredientes: </strong>{{amostra.ingredientes}}</li>
+                    <h5 *ngIf="amostra.analise_teste.length <= 0">Sem respostas</h5>
+                </ul>
+
+                <div id="respostas" *ngFor=" let analise_teste of amostra.analise_teste">
+                    <li class="list-group-item {{bgs[bg(i)]}}">{{analise_teste.nome_teste}}</li>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Faixa etária</th>
+                                    <th scope="col">Gênero</th>
+                                    <th scope="col">Consumo</th>
+                                    <th scope="col" *ngFor=" let atributo of analise_teste.fichas[0]?.respostas">
+                                        {{atributo.nome_atributo}}
+                                    </th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr *ngFor=" let ficha of analise_teste.fichas; let contador2 = index">
+                                    <th scope="row">{{contador2+1}}</th>
+                                    <td>{{ficha.nome_aluno}}</td>
+                                    <td>{{ficha.faixa_etaria}}</td>
+                                    <td>{{ficha.genero}}</td>
+                                    <td>{{ficha.frequencia_consumo}}</td>
+                                    <td *ngFor=" let resposta of ficha.respostas">{{resposta.resposta}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ul>
+
+    </div>
+    <div id="graficos" class=seg{{segment}}>
+
+    </div>
+</ion-content>

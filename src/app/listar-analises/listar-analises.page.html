@@ -1,0 +1,74 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Análises</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="goHome()">
+                <ion-icon class="icon-bar" name="home-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="goPerfil()">
+                <ion-icon class="icon-bar" name="person-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="sair()">
+                <ion-icon class="icon-bar" name="exit-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+            refreshingSpinner="circles" refreshingText="Carregando...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <ion-card *ngFor=" let analise of analises; let i = index">
+        <ion-item>
+            <small>{{converterData(analise.data)}}</small>
+            <ion-button slot="end" (click)="presentActionSheet(analise)">Opções</ion-button>
+        </ion-item>
+        <ion-card-header>
+            <ion-card-title><strong>{{analise.nome_alimento}}</strong></ion-card-title>
+        </ion-card-header>
+        <ion-item>
+            <ion-label>Aceitando respostas</ion-label>
+            <ion-toggle color="success" [checked]="analise.status == 1 ? true : false " (click)="switch($event, analise.id_analise)"></ion-toggle>
+        </ion-item>
+        <ion-card-content>
+            Cod: <strong>{{analise.codigo}}</strong> <br>
+            Usuário: {{analise.nome_usuario}}
+        </ion-card-content>
+    </ion-card>
+
+    <!--<ul class="list-group">
+        <li class="list-group-item align-items-start {{bgs[bg(i)]}}" *ngFor=" let a of analises; let i = index">
+
+            <div class="todo-card">
+                <button id="bt" class="mais" (click)="goToRespostas(a.id_analise)">
+          <ion-icon class="bt" name="ellipsis-vertical"></ion-icon>
+        </button>
+                <p class="titulo"><strong>{{a.titulo_analise}}</strong></p>
+
+
+                <strong>{{a.nome_user}} - </strong>
+                <small>{{a.matricula_user}}</small>
+                <div class="switch__container">
+                    <input id="{{a.id_analise}}" class="switch switch--shadow" type="checkbox" [checked]="a.status == 1 ? true : false " (click)="switch($event, a.id_analise)" />
+                    <label for="{{a.id_analise}}"></label>
+                </div>
+                <br>    
+                <strong>Cod:</strong>
+                <small>{{a.codigo}}</small>
+                <br>
+                <strong>Descrição:</strong>
+                <p class="mb-1" class="desc">{{a.desc_analise}}</p>                
+            </div>
+            <div class="data text-muted text-center">
+                <small>{{converterData(a.data)}}</small>
+            </div>
+        </li>
+
+    </ul>-->
+</ion-content>

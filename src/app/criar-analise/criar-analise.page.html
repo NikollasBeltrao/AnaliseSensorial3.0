@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nova Análise</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goHome()">
+        <ion-icon class="icon-bar" name="home-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goPerfil()">
+        <ion-icon class="icon-bar" name="person-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="sair()">
+        <ion-icon class="icon-bar" name="exit-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="todo">
+    <form id="form" [formGroup]="fGroup" (ngSubmit)="cadastrar()">
+      <div class=" form-row ">
+
+        <div class="form-group col-12">
+          <label for="titulo">Nome do alimento</label>
+          <input type="text" formControlName="titulo" class="form-control" id="titulo" placeholder="EX: Chocolate">
+          <small *ngIf="fGroup.controls.titulo.value == '' && validar" class="text-muted">*Obrigatório</small>
+        </div>
+
+        <div class="form-group col-12">
+          <ion-label position="fixed">Descrição</ion-label>
+          <ion-textarea formControlName="desc" id="desc"></ion-textarea>
+          <small *ngIf="fGroup.controls.desc.value == '' && validar" class="text-muted">*Obrigatório</small>
+        </div>
+
+        <div class="form-group col-12">
+          <ion-label position="fixed">Testes disponíveis</ion-label>
+        </div>
+
+        <!--Escala Hedônica-->
+        <div class="form-group col-12">
+          <input id="hed" type="checkbox" formControlName="hedonica">
+          <label class="form-check-label" for="hed">
+            Escala Hedônica
+          </label>
+          <div class="form-group col-12" *ngIf="fGroup.value.hedonica">
+            <ion-label position="fixed">Atributos Hedônica</ion-label>
+            <small for="per"><br> Você pode escolher um dos modelos de atributos abaixo.</small>
+            <select class="form-control" id="per" formControlName="aux_atributos" (change)="alterar_atributos()">
+              <option value="">Escolha um modelo</option>
+              <option value="Cor, Cheiro, Sabor, Impressão Global">Cor, Cheiro, Sabor, Impressão Global</option>
+              <option value="Aparência, Sabor, Impressão Global">Aparência, Sabor, Impressão Global</option>
+            </select>
+            <tag-input formControlName="atributosHedonica" id="atr"></tag-input>
+            <small>Obs: Os atributos serão apresentados, para o provador, na mesma ordem que forem cadastrados. </small>
+            <small *ngIf="fGroup.controls.atributosHedonica.value.length == 0 && fGroup.value.hedonica && validar"
+              class="text-muted">*Obrigatório</small>
+          </div>
+          <div class="form-group col-12" *ngIf="fGroup.value.hedonica">
+            <ion-label position="fixed">Descrição Hedônica</ion-label>
+            <ion-textarea formControlName="descHedonica"></ion-textarea>
+            <small *ngIf="fGroup.value.descHedonica == '' && fGroup.value.hedonica && validar"
+              class="text-muted">*Obrigatório</small>
+          </div>
+        </div>
+
+        <!--Atitude de Compra-->
+        <div class="form-group col-12">
+          <input id="com" type="checkbox" formControlName="compra">
+          <label class="form-check-label" for="com">
+            Atitude de Compra
+          </label>
+          <div class="form-group col-12" *ngIf="fGroup.value.compra">
+            <ion-label position="fixed">Descrição Compra</ion-label>
+            <ion-textarea formControlName="descCompra"></ion-textarea>
+            <small *ngIf="fGroup.value.descCompra == '' && fGroup.value.compra && validar"
+              class="text-muted">*Obrigatório</small>
+          </div>
+        </div>
+
+        <!--Teste de Preferência-->
+        <div class="form-group col-12">
+          <input id="pref" type="checkbox" formControlName="preferencia">
+          <label class="form-check-label" for="pref">
+            Preferência
+          </label>
+          <div class="form-group col-12" *ngIf="fGroup.value.preferencia">
+            <ion-label position="fixed">Descrição Preferência</ion-label>
+            <ion-textarea formControlName="descPreferencia"></ion-textarea>
+            <small *ngIf="fGroup.value.descPreferencia == '' && fGroup.value.preferencia && validar"
+              class="text-muted">*Obrigatório</small>
+          </div>
+        </div>
+
+        <!--Teste de Comparação-->
+        <div class="form-group col-12">
+          <input id="comp" type="checkbox" formControlName="comparacao">
+          <label class="form-check-label" for="comp">
+            Comparação
+          </label>
+          <div class="form-group col-12" *ngIf="fGroup.value.comparacao">
+            <ion-label position="fixed">Atributo</ion-label>
+            <tag-input formControlName="atributosComparacao" id="atr"></tag-input>
+            <small>Obs: Os atributos serão apresentados, para o provador, na mesma ordem que forem cadastrados. </small>
+            <small *ngIf="fGroup.controls.atributosComparacao.value.length == 0 && fGroup.value.comparacao && validar"
+              class="text-muted">*Obrigatório</small>
+          </div>
+          <div class="form-group col-12" *ngIf="fGroup.value.comparacao">
+            <ion-label position="fixed">Descrição comparação</ion-label>
+            <ion-textarea formControlName="descComparacao"></ion-textarea>
+            <small *ngIf="fGroup.value.descComparacao == '' && fGroup.value.comparacao && validar"
+              class="text-muted">*Obrigatório</small>
+          </div>
+        </div>
+
+
+        <div class="form-group col-12">
+          <small class="text-muted"
+            *ngIf="(!this.fGroup.value.hedonica && !this.fGroup.value.compra && !this.fGroup.value.preferencia) && validar ">Escolha
+            pelo menos um dos testes acima</small>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Cadastrar</button>
+    </form>
+  </div>
+</ion-content>

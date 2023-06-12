@@ -1,0 +1,89 @@
+small {
+    color: red !important;
+}
+#todo {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #F1F1F1;
+}
+#todo-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.btn-mais {
+    width: 80%;
+    border: solid 1px gray;
+    border-radius: 5px;
+    background-color: #4169E2;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.close {
+    float: right;
+}
+
+.form {
+    padding: 10px;
+    max-width: 700px;
+    height: auto;
+    background-color: white;
+    border-radius: 6px;
+    margin: 20px;
+    -webkit-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.45);
+	-moz-box-shadow:    0px 1px 7px rgba(0, 0, 0, 0.45);
+	box-shadow:         0px 1px 7px rgba(0, 0, 0, 0.45);
+}
+.centro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.btn {
+    float: right;
+    background-color: #47D5C9;
+    margin-right: 10px;
+    color: #303030;
+    margin-bottom: 20px;
+}
+#btns-foto {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 250px;    
+}
+#btns-foto div{
+    display: flex;
+    flex-direction: column;
+}
+#bt1 {
+    background-color: #EDC6E5;
+}
+#bt2 {
+    background-color: #FCC9AB;
+}
+#btns-foto button{ 
+           
+    width: 60px;
+    height: 60px;
+    font-size: 17px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+    border: solid 1px #CDCDCD;
+    -webkit-box-shadow: 4px 5px 12px rgba(0, 0, 0, 0.45);
+	-moz-box-shadow:    4px 5px 12px rgba(0, 0, 0, 0.45);
+	box-shadow:         4px 5px 12px rgba(0, 0, 0, 0.45);
+}   
+#img {
+    width: 70%;
+    height: 170px;
+    -webkit-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.45);
+	-moz-box-shadow:    0px 1px 7px rgba(0, 0, 0, 0.45);
+	box-shadow:         0px 1px 7px rgba(0, 0, 0, 0.45);
+}
+#btns-foto button svg {
+    color: #303030;
+    font-size: 30px;
+}
