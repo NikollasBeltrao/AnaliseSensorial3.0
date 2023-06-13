@@ -1,5 +1,5 @@
 import { stringify } from '@angular/compiler/src/util';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
@@ -37,7 +37,8 @@ export class AnalisePage implements OnInit {
   bgs = ['bg-azul', 'bg-laranja', 'bg-rosa', 'bg-amarelo'];
   a;
   constructor(private analiseService: AnaliseService, public loading: LoadingController, private router: Router,
-    public alertController: AlertController, private nativePageTransitions: NativePageTransitions) {
+    public alertController: AlertController, private nativePageTransitions: NativePageTransitions,
+    public toastController: ToastController) {
     this.analise = new Analise;
     this.amostras = [];
     this.ficha = new Ficha;
@@ -77,7 +78,7 @@ export class AnalisePage implements OnInit {
       }
       load.dismiss();
     }, (err) => {
-      this.presentAlert("Ocorreu um erro ao carregar os dados");
+      this.presentToast("Ocorreu um erro ao carregar os dados");
     });
 
     await this.analiseService.getRespostaByCodigo(this.codigo_analise).then(data => {
@@ -91,17 +92,16 @@ export class AnalisePage implements OnInit {
       load.dismiss();
     }, (err) => {
       console.log(err);
-      this.presentAlert("Ocorreu um erro ao carregar os dados");
+      this.presentToast("Ocorreu um erro ao carregar os dados");
     });
   }
 
 
   proximo(id: number, amostra?: number) {
-    console.log(this.amostras);
     switch (id) {
       case -2:
         var cont = 0;
-        this.testeIsolado[amostra].atributos.forEach((re) => {
+        this.testeIsolado[amostra-1].atributos.forEach((re) => {
           if (re.valor == 0) {
             cont += 1;
           }
@@ -110,7 +110,7 @@ export class AnalisePage implements OnInit {
           //this.submit();
         }
         else {
-          this.presentAlert('Preencha todos os campos', ' ');
+          this.presentToast('Preencha todos os campos');
         }
         break;
       case -1:
@@ -126,21 +126,19 @@ export class AnalisePage implements OnInit {
           //this.submit();
         }
         else {
-          this.presentAlert('Preencha todos os campos', ' ');
+          this.presentToast('Preencha todos os campos');
         }
         break;
       case 1:
-        console.log(this.ficha.faixa_etaria);
         if (this.ficha.faixa_etaria != '' && this.ficha.genero != '' && this.ficha.frequencia_consumo != 0) {
           this.passos = { ...this.passos, id: id };
         }
         else {
-          this.presentAlert('Preencha todos os campos', ' ');
+          this.presentToast('Preencha todos os campos');
         }
         break;
       default:
         var cont = 0;
-
         if (id > this.amostras.length + 1) {
           this.testeIsolado[amostra].atributos.forEach((re) => {
             if (re.valor == 0) {
@@ -159,11 +157,10 @@ export class AnalisePage implements OnInit {
         }
 
         if (cont == 0) {
-          console.log(id, this.amostras.length + 1)
           this.passos = { ...this.passos, id: id };
         }
         else {
-          this.presentAlert('Preencha todos os campos', ' ');
+          this.presentToast('Preencha todos os campos');
         }
     }
   }
@@ -220,15 +217,23 @@ export class AnalisePage implements OnInit {
     let form = new FormData();
     form.append("saveRespostas", (JSON.stringify(this.respostas[0])));
     await this.analiseService.saveRespostas(form).then(res => {
+      load.dismiss();
       this.presentAlert("Obrigado por participar da pesquisa !!! 😉", ' ');
       this.sair();
-      console.log(res)
     }, (err) => {
       load.dismiss();
-      this.presentAlert("Ocorreu um erro ao salvar os dados");
+      this.presentToast("Ocorreu um erro ao salvar os dados");
       console.log(err)
     });
-    load.dismiss();
+  }
+
+  async presentToast(menssagem: string) {
+    const toast = await this.toastController.create({
+      message: menssagem,
+      duration: 2000,
+      color: "danger"
+    });
+    toast.present();
   }
 
   bg(i) {
