@@ -23,15 +23,15 @@
     <form id="form" [formGroup]="fGroup" (ngSubmit)="cadastrar()">
       <div class=" form-row ">
 
-        <div class="form-group col-12">
-          <label for="titulo">Nome do alimento</label>
-          <input type="text" formControlName="titulo" class="form-control" id="titulo" placeholder="EX: Chocolate">
-          <small *ngIf="fGroup.controls.titulo.value == '' && validar" class="text-muted">*Obrigatório</small>
+        <div class="form-group col-12"> 
+          <label for="nome_alimento">Nome do alimento</label>
+          <input type="text" formControlName="nome_alimento" class="form-control" id="nome_alimento" placeholder="EX: Chocolate">
+          <small *ngIf="fGroup.controls.nome_alimento.value == '' && validar" class="text-muted">*Obrigatório</small>
         </div>
 
         <div class="form-group col-12">
-          <ion-label position="fixed">Descrição</ion-label>
-          <ion-textarea formControlName="desc" id="desc"></ion-textarea>
+          <ion-label position="fixed">Instruções</ion-label>
+          <ion-textarea formControlName="instrucoes" id="instrucoes"></ion-textarea>
         </div>
 
         <div class="form-group col-12">
@@ -46,7 +46,6 @@
           </label>
           <div class="form-group col-12" *ngIf="fGroup.value.hedonica">
             <ion-label position="fixed">Atributos Hedônica</ion-label>
-            <small for="per"><br> Você pode escolher um dos modelos de atributos abaixo.</small>
             <select class="form-control" id="per" formControlName="aux_atributos" (change)="salvar_atributo_hedonica()">
               <option value="0">Escolha um atributo</option>
               <option *ngFor="let atributo of atributos; let i = index" value={{i}}>{{atributo.nome_atributo}}</option>

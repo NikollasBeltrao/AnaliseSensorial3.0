@@ -32,6 +32,7 @@
 .btn {
     color: var(--ion-color-primary-contrast);
     background-color: var(--ion-color-primary);
+    border: solid 1px black !important;
 }
 
 .btn:focus {

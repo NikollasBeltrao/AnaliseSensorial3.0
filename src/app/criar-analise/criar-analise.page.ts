@@ -25,12 +25,12 @@ export class CriarAnalisePage implements OnInit {
     private loadingCtrl: LoadingController, public formBuilder: FormBuilder, private router: Router,
     private nativePageTransitions: NativePageTransitions, public alertController: AlertController) {
     this.fGroup = this.formBuilder.group({
-      titulo: new FormControl('', Validators.required),
+      nome_alimento: new FormControl('', Validators.required),
       hedonica: new FormControl(''),
       compra: new FormControl(''),
       preferencia: new FormControl(''),
       comparacao: new FormControl(''),
-      desc: new FormControl(''),
+      instrucoes: new FormControl(''),
       atributosHedonica: new FormControl([]),
       atributosCompra: new FormControl([]),
       aux_atributos: new FormControl(0),
@@ -48,7 +48,7 @@ export class CriarAnalisePage implements OnInit {
 
   async ngOnInit() {
     await this.active.params.subscribe(params => {
-      this.idUser = params["id_user"];
+      this.idUser = params["id_usuario"];
     });
     this.listarAtributos();
   }
@@ -59,7 +59,6 @@ export class CriarAnalisePage implements OnInit {
     });
     load.present();
     await this.analiseService.listarAtributos().then(data => {
-      console.log(data);
       if (data) {
         this.atributos = data;
       }
@@ -110,38 +109,78 @@ export class CriarAnalisePage implements OnInit {
 
 
   async cadastrar() {
-
+    let load = await this.loadingCtrl.create({
+      message: 'Carregando',
+    });
+    load.present();
     this.validar = true;
     if (this.fGroup.valid &&
       ((this.fGroup.value.hedonica && this.fGroup.value.descHedonica != '' && this.fGroup.controls.atributosHedonica.value.length > 0)
         || (this.fGroup.value.compra && this.fGroup.value.descCompra != '') ||
         (this.fGroup.value.preferencia && this.fGroup.value.descPreferencia != '') ||
         (this.fGroup.value.comparacao && this.fGroup.value.descComparacao != '' && this.fGroup.controls.atributosComparacao.value.length > 0))) {
-      console.log()
 
+      var analise_testes = [];
+
+      if (this.fGroup.value.hedonica) {
+        analise_testes.push({
+          fk_teste_padrao: 1,
+          descricao: this.fGroup.value.descHedonica,
+          atributos: this.fGroup.value.atributosHedonica
+        })
+      }
+
+      if (this.fGroup.value.compra) {
+        analise_testes.push({
+          fk_teste_padrao: 2,
+          descricao: this.fGroup.value.descCompra,
+          atributos: [{ display: '', value: '1' }]
+        })
+      }
+
+      if (this.fGroup.value.preferencia) {
+        analise_testes.push({
+          fk_teste_padrao: 3,
+          descricao: this.fGroup.value.descPreferencia,
+          atributos: [{ display: '', value: '5' }]
+        })
+      }
+
+      if (this.fGroup.value.comparacao) {
+        analise_testes.push({
+          fk_teste_padrao: 4,
+          descricao: this.fGroup.value.descComparacao,
+          atributos: this.fGroup.value.atributosComparacao
+        })
+      }
       let idAnalise;
-      let load = await this.loadingCtrl.create({
-        message: 'Carregando',
-      });
-      load.present();
 
-      /*await this.analiseService.saveAnalise(form).then(res => {
-        console.log(res["lastId"])
-        let response = (res["lastId"]);
+      console.log(analise_testes);
+
+      let form = new FormData();
+      form.append("nome_alimento", this.fGroup.value.nome_alimento);
+      form.append("fk_usuario", this.idUser);
+      form.append("instrucoes", this.fGroup.value.instrucoes);
+      form.append("analise_testes", JSON.stringify(analise_testes));
+
+      await this.analiseService.cadastrarAnalise(form).then(res => {
+        let response = (res["id_analise"]);
         if (response) {
           load.dismiss();
           this.presentAlert(response);
           idAnalise = response;
         }
+        load.dismiss();
       }).catch(err => {
+        load.dismiss();
         console.error(err);
-      });*/
+      });
 
-      load.dismiss();
 
     }
     else {
       this.err = "Peencha todos os campos";
+      load.dismiss();
     }
   }
   goHome() {

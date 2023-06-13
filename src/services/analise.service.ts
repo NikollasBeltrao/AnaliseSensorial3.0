@@ -69,6 +69,24 @@ export class AnaliseService {
         });
     }
 
+    cadastrarAnalise(form) {
+        form.append("cadastrarAnalise", "cadastrarAnalise");
+        return new Promise<any>((resolve, reject) => {
+            this.http.post(this.server + "/analise.php", form).
+                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
+        });
+    }
+
+    criarAmostra(form) {
+        form.append("criarAmostra", "criarAmostra");
+        return new Promise<any>((resolve, reject) => {
+            this.http.post(this.server + "/analise.php", form).
+                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
+        });
+    }
+
+
+
 
 
     getAll() {
@@ -91,20 +109,8 @@ export class AnaliseService {
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }
-    saveAnalise(form) {
-        form.append("saveAnalise", "saveAnalise");
-        return new Promise<any>((resolve, reject) => {
-            this.http.post(this.server + "/analise/analise.php", form).
-                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
-        });
-    }
-    saveAmostra(form) {
-        form.append("saveAmostra", "saveAmostra");
-        return new Promise<any>((resolve, reject) => {
-            this.http.post(this.server + "/analise/analise.php", form).
-                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
-        });
-    }
+    
+   
 
     saveRespostas(form) {
         return new Promise<any>((resolve, reject) => {

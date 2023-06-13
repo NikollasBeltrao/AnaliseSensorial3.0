@@ -9,6 +9,10 @@ switch ($method) {
     case 'POST':
         if (isset($_POST['changeStatus'])) {
             changeStatus();
+        } else if (isset($_POST['cadastrarAnalise'])) {
+            cadastrarAnalise();
+        } else if (isset($_POST['criarAmostra'])) {
+            criarAmostra();
         }
         break;
     case 'GET':
@@ -36,6 +40,96 @@ switch ($method) {
         echo '{"error": "Método inválido"}';
         break;
 }
+
+function criarAmostra()
+{
+    $criado = '';
+    if ($_POST['img'] != '') {
+        $criado = uploadImg($_POST['img']);
+    }
+    try {
+        if ($criado != false) {
+            $bdpdo = BDPDO::getInstancia();
+            $query = $bdpdo->prepare("INSERT INTO amostra (fk_analise, numero_amostra, ingredientes, img_amostra) 
+        VALUES (:analise, :numero, :desc, :img)");
+            $query->bindValue(":analise", $_POST['analise']);
+            $query->bindValue(":numero", $_POST['numero']);
+            $query->bindValue(":desc", $_POST['desc']);
+            $query->bindValue(":img", $criado);
+            $query->execute();
+        } else {
+            echo ('{"err": "Não foi possivel salvar a imagem"}');
+        }
+    } catch (Exception $e) {
+        echo ('{"err": "' . $e . '"}');
+    }
+}
+
+function uploadImg($img)
+{
+    define('UPLOAD_DIR', 'imagens/');
+    $img = str_replace('data:image/jpeg;base64,', '', $img);
+    $img = str_replace(' ', '+', $img);
+    $data = base64_decode($img);
+    $file = UPLOAD_DIR . uniqid() . '.png';
+    $sucess = file_put_contents($file, $data);
+    if ($sucess == false) {
+        return $sucess;
+    } else {
+        return $file;
+    }
+}
+
+function cadastrarAnalise()
+{
+    try {
+        $Rand = '';
+        do {
+            $Rand = str_pad(dechex(Rand(0x000000, 0xFFFFFF)), 6, 0, STR_PAD_LEFT);
+            $sql = "SELECT COUNT(*) as total FROM analise WHERE codigo = '" . $Rand . "'";
+            $bdpdo = BDPDO::getInstancia();
+            $p_sql = $bdpdo->query($sql);
+        } while ($p_sql->fetchObject()->total != 0);
+
+        $sql = "INSERT INTO analise (nome_alimento, fk_usuario, instrucoes, codigo) 
+                VALUES (?, ?, ?, ?)";
+        $bdpdo = BDPDO::getInstancia();
+        $p_sql = $bdpdo->prepare($sql);
+        $p_sql->bindValue(1, $_POST['nome_alimento']);
+        $p_sql->bindValue(2, $_POST['fk_usuario']);
+        $p_sql->bindValue(3, $_POST['instrucoes']);
+        $p_sql->bindValue(4, $Rand);
+        $p_sql->execute();
+
+        $id_analise = $bdpdo->lastInsertId();
+
+        foreach (json_decode($_POST['analise_testes']) as $teste) {
+            $sql = "INSERT INTO analise_teste(fk_analise, fk_teste_padrao, descricao_analise_teste) 
+            VALUES (?, ?, ?)";
+            $bdpdo = BDPDO::getInstancia();
+            $p_sql = $bdpdo->prepare($sql);
+            $p_sql->bindValue(1, $id_analise);
+            $p_sql->bindValue(2, $teste->fk_teste_padrao);
+            $p_sql->bindValue(3, $teste->descricao);
+            $p_sql->execute();
+
+            $id_analise_teste = $bdpdo->lastInsertId();
+
+            foreach ($teste->atributos as $atributo) {
+                $sql = "INSERT INTO atributo_teste (fk_analise_teste, fk_atributo_padrao) VALUES (?, ?)";
+                $bdpdo = BDPDO::getInstancia();
+                $p_sql = $bdpdo->prepare($sql);
+                $p_sql->bindValue(1, $id_analise_teste);
+                $p_sql->bindValue(2, $atributo->value);
+                $p_sql->execute();
+            }
+        }
+        echo '{"id_analise": ' . $id_analise . '}';
+    } catch (Exception $e) {
+        print "Erro ao executar a função de listarTodos" . $e->getMessage();
+    }
+}
+
 
 function listarAtributos()
 {

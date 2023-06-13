@@ -6,7 +6,7 @@ small {
     height: auto;
     display: flex;
     flex-direction: column;
-    background-color: #F1F1F1;
+    background-color: var(--ion-color-secondary);
 }
 #todo-form {
     display: flex;
@@ -17,9 +17,10 @@ small {
     width: 80%;
     border: solid 1px gray;
     border-radius: 5px;
-    background-color: #4169E2;
+    background-color: var(--ion-color-primary);
     padding: 10px;
     margin-bottom: 20px;
+    color: var(--ion-color-primary-contrast);
 }
 .close {
     float: right;
@@ -43,9 +44,7 @@ small {
 }
 .btn {
     float: right;
-    background-color: #47D5C9;
     margin-right: 10px;
-    color: #303030;
     margin-bottom: 20px;
 }
 #btns-foto {

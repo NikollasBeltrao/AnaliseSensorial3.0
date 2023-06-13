@@ -51,7 +51,7 @@ export class LoginPage implements OnInit {
             }
             this.nativePageTransitions.slide(options)
               .catch(console.error);
-            this.route.navigate(['usuario-logado', { id_usuario: this.usuario.id_usuario }]);
+            this.route.navigate(['usuario-logado', { id_user: this.usuario.id_usuario }]);
             load.dismiss();
           }
           else {

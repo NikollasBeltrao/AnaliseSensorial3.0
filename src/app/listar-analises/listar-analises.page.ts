@@ -145,6 +145,13 @@ export class ListarAnalisesPage implements OnInit {
           },
         },
         {
+          text: 'Cadastrar Amostras',
+          icon: 'create-outline',
+          handler: () => {
+            this.route.navigate(["cadastrar-amostra", { id_user: this.idUser, id_analise: analise.id_analise }]);
+          },
+        },
+        {
           cssClass: 'err',
           text: 'Remover',
           role: 'destructive',

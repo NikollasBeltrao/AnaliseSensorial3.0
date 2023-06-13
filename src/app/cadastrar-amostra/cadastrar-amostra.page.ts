@@ -9,7 +9,6 @@ import { AnaliseService } from 'src/services/analise.service';
 
 
 interface Amostra {
-  nome?: string;
   desc: string;
   analise: string;
   numero: number;
@@ -34,7 +33,6 @@ export class CadastrarAmostraPage implements OnInit {
     private active: ActivatedRoute, private analiseService: AnaliseService, private loadingCtrl: LoadingController,
     private router: Router, private nativePageTransitions: NativePageTransitions, public alertController: AlertController) {
     this.fGroup = this.formBuilder.group({
-      nome: new FormControl('', Validators.required),
       numero: new FormControl("", Validators.compose([
         Validators.required,
         Validators.min(100),
@@ -58,7 +56,6 @@ export class CadastrarAmostraPage implements OnInit {
   criarAmostra() {
     if (this.amostras.length === 0) {
       this.amostras.push({
-        nome: '',
         desc: '',
         analise: this.idAnalise,
         numero: Math.floor(Math.random() * (999 - 100) + 100),
@@ -72,7 +69,6 @@ export class CadastrarAmostraPage implements OnInit {
         numero = Math.floor(Math.random() * (999 - 100) + 100);
       } while (this.amostras.filter((el) => (el.numero === numero)).length > 0);
       this.amostras.push({
-        nome: '',
         desc: '',
         analise: this.idAnalise,
         numero: numero,
@@ -99,7 +95,6 @@ export class CadastrarAmostraPage implements OnInit {
     await this.amostras.map(async (el, i)  => {
 
       let form = new FormData();
-      form.append("nome", el.nome);
       form.append("numero", el.numero.toString());
       form.append("desc", el.desc);
       form.append("analise", this.idAnalise.toString());
@@ -108,7 +103,8 @@ export class CadastrarAmostraPage implements OnInit {
         message: 'Carregando',
       });
       load.present();
-      await this.analiseService.saveAmostra(form).then(res => {
+      await this.analiseService.criarAmostra(form).then(res => {
+        console.log(res);
         if (i === this.amostras.length -1) {
           this.presentAlert("Amostra(s) cadastradas com sucesso");
         }

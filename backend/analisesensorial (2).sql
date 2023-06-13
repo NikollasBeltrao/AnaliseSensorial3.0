@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 12-Jun-2023 às 05:46
+-- Tempo de geração: 13-Jun-2023 às 06:05
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.4
 
@@ -42,20 +42,8 @@ CREATE TABLE `amostra` (
 INSERT INTO `amostra` (`id_amostra`, `ingredientes`, `fk_analise`, `numero_amostra`, `img_amostra`) VALUES
 (30, 'Chocolate amargo', 56, 257, ''),
 (31, 'Chocolate ao leite', 56, 395, ''),
-(32, 'Ingredientes..........', 57, 614, ''),
-(33, 'Ingredientes..........', 57, 177, ''),
-(34, 'Ingredientes..........', 57, 267, ''),
-(35, '', 59, 265, ''),
-(36, 'Ingredientes...', 60, 715, ''),
-(37, 'Ingredientes....', 60, 384, ''),
-(38, '', 61, 735, ''),
-(39, '', 61, 360, ''),
-(40, '', 62, 653, ''),
-(41, '', 63, 302, ''),
-(42, 'Leite, açúcar, essência de morango', 64, 171, 'https://backend-analise.000webhostapp.com/backend-analise/analise/imgsamostras/637febc1cb5b2.png'),
-(43, '', 67, 683, ''),
-(44, 'varias coisas ', 68, 163, ''),
-(45, '', 71, 195, 'https://backend-analise.000webhostapp.com/backend-analise/analise/imgsamostras/643ef644014c2.png');
+(46, 'teste amostra 435', 77, 435, ''),
+(47, 'teste amostra 783', 77, 783, '');
 
 -- --------------------------------------------------------
 
@@ -79,23 +67,7 @@ CREATE TABLE `analise` (
 
 INSERT INTO `analise` (`id_analise`, `nome_alimento`, `fk_usuario`, `data`, `instrucoes`, `status`, `codigo`) VALUES
 (56, 'Chocolate', 1, '2022-08-13', 'Teste de análise de chocolate', 1, '26ee49'),
-(57, 'Analise de comparação', 1, '2022-08-13', 'Teste de comparação', 0, '32d64e'),
-(58, 'Coxinha Errado', 1, '2022-08-17', '', 0, '064c1e'),
-(59, 'Coxinha Errado', 1, '2022-08-17', '', 0, '296657'),
-(60, 'Teste', 1, '2022-08-18', 'testando.....', 1, '379368'),
-(61, 'Macarrão ', 18, '2022-08-18', '', 1, 'b9859c'),
-(62, 'Coxinha', 1, '2022-08-18', '', 0, 'e48c9f'),
-(63, 'Pastel', 29, '2022-09-04', '', 0, '976cb6'),
-(64, 'Sorvete ', 31, '2022-11-24', 'teste', 1, '29f7d2'),
-(65, 'Hdjsaj', 1, '2022-12-01', 'jsjsj', 1, '4b575e'),
-(66, 'Hfh', 1, '2022-12-14', 'jcc', 0, 'e96e7c'),
-(67, 'Teste', 1, '2022-12-20', '', 0, 'd67f3c'),
-(68, 'sanduiche de buceta', 32, '2023-03-03', 'feito de forma duvidosa', 1, '08de90'),
-(69, 'Sorvete', 1, '2023-03-09', '', 0, 'f58d4a'),
-(70, 'Suco tropical de cajá-umbu', 1, '2023-04-18', '', 0, '337723'),
-(71, 'Suco tropical de cajá-umbu', 1, '2023-04-18', 'Você está recebendo uma amostra de suco tropical de cajá-umbu. Favor não realizar o teste caso tenha alergia a este produto.', 1, 'b5cf40'),
-(72, 'asdf', 1, '2023-05-28', 'asfas', 0, '8521af'),
-(73, 'teste 8', 1, '2023-05-28', 'sdfsf', 0, '3b8195');
+(77, 'TESTE', 1, '2023-06-12', 'FDDG EFGFDA F ', 1, 'a9d7f7');
 
 -- --------------------------------------------------------
 
@@ -116,7 +88,11 @@ CREATE TABLE `analise_teste` (
 
 INSERT INTO `analise_teste` (`id_analise_teste`, `fk_analise`, `fk_teste_padrao`, `descricao_analise_teste`) VALUES
 (1, 56, 2, 'uyhyfhf uyhgfyfhj'),
-(2, 56, 1, 'bkkvcmnokhj');
+(2, 56, 1, 'bkkvcmnokhj'),
+(3, 77, 1, 'Você está recebendo ---- amostras de -----. Avalie cada amostra e utilize a escala abaixo para identificar o quanto você gostou/desgostou de cada amostra quanto à ----, ----, ----, ---- e ----. Prove as amostras da esquerda para direita.'),
+(4, 77, 2, 'Agora avalie quanto à sua atitude de compra'),
+(5, 77, 3, 'Qual foi sua amostra proferida ?'),
+(6, 77, 4, 'Compare os atributos');
 
 -- --------------------------------------------------------
 
@@ -164,7 +140,13 @@ INSERT INTO `atributo_teste` (`id_atributo_teste`, `fk_analise_teste`, `fk_atrib
 (1, 2, 4),
 (2, 1, 1),
 (3, 2, 2),
-(4, 2, 3);
+(4, 2, 3),
+(5, 3, 3),
+(6, 3, 2),
+(7, 4, 1),
+(8, 5, 5),
+(9, 6, 8),
+(10, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -186,102 +168,8 @@ CREATE TABLE `ficha` (
 --
 
 INSERT INTO `ficha` (`id_ficha`, `nome_aluno`, `genero`, `faixa_etaria`, `frequencia_consumo`, `fk_analise`) VALUES
-(107, '', 'Masculino', 'menos de 18 anos', 1, 57),
 (108, '', 'Feminino', '18 a 21 anos', 1, 56),
-(109, 'Usuário Teste', 'Feminino', '18 a 21 anos', 1, 56),
-(110, 'Fulano', 'Prefiro não responder', 'mais de 35 anos', 1, 57),
-(111, 'Nikollas ', 'Masculino', '18 a 21 anos', 2, 60),
-(112, 'Laura Jorge Nogueira Cavalcanti', 'Feminino', 'mais de 35 anos', 3, 62),
-(113, 'Cosmo Rufino de Lima ', 'Masculino', 'mais de 35 anos', 3, 62),
-(114, 'Raquel Silva de Castro ', 'Feminino', '22 a 26 anos', 4, 62),
-(115, 'Flávia ', 'Feminino', '27 a 35 anos', 2, 62),
-(116, 'Rayssa Isabelle da Silva Marques ', 'Feminino', '18 a 21 anos', 2, 62),
-(117, 'Leonardo Vandré dos Santos Siqueira', 'Masculino', '22 a 26 anos', 3, 62),
-(118, 'Thauanni vitória ', 'Feminino', '18 a 21 anos', 3, 62),
-(119, 'Vitório David ', 'Masculino', '18 a 21 anos', 3, 62),
-(120, 'Severino Neto ', 'Masculino', '22 a 26 anos', 3, 62),
-(121, 'Pablo', 'Masculino', 'mais de 35 anos', 3, 62),
-(122, 'Luís Henrique de Araújo Nunes ', 'Masculino', '18 a 21 anos', 3, 62),
-(123, 'Denys Victor Guedes da Silva ', 'Masculino', '22 a 26 anos', 3, 62),
-(124, 'Pedro Vinicius Alcantara', 'Masculino', '22 a 26 anos', 3, 62),
-(125, 'Lucas Lopes', 'Masculino', '27 a 35 anos', 2, 62),
-(126, 'Maria Clara dos Santos Vasconcelos ', 'Feminino', '18 a 21 anos', 3, 62),
-(127, 'Rennan', 'Masculino', '22 a 26 anos', 3, 62),
-(128, 'Maria Isabela ', 'Feminino', '22 a 26 anos', 4, 62),
-(129, 'Jéssica Maria', 'Feminino', '27 a 35 anos', 3, 62),
-(130, 'Denise ', 'Feminino', '27 a 35 anos', 2, 62),
-(131, 'Thiago veras da silva', 'Masculino', '18 a 21 anos', 3, 62),
-(132, 'Marcia Cristina Rafael de lima', 'Feminino', '27 a 35 anos', 3, 62),
-(133, 'José Adrian Santos LEITE ', 'Masculino', '18 a 21 anos', 2, 62),
-(134, 'Henrique Alisson', 'Masculino', '27 a 35 anos', 3, 62),
-(135, 'Lucas Silva Batista ', 'Masculino', '18 a 21 anos', 2, 62),
-(136, 'Pedro Felipe Claudino messias rocha', 'Masculino', '18 a 21 anos', 2, 62),
-(137, 'Francisco Lindermberg Monteiro Martins', 'Masculino', '27 a 35 anos', 2, 62),
-(138, 'Luan Carlos da Costa anjos ', 'Masculino', '22 a 26 anos', 2, 62),
-(139, 'Kennedy Francês Rodrigues Damascena', 'Masculino', '27 a 35 anos', 3, 62),
-(140, 'Juscelino Alves Henriques', 'Masculino', '27 a 35 anos', 3, 62),
-(141, 'Edclecia Barbosa de Araujo', 'Feminino', '27 a 35 anos', 3, 62),
-(142, 'Maria Daniela Pereira Barbosa ', 'Feminino', '18 a 21 anos', 3, 62),
-(143, 'José Emerson ', 'Masculino', '18 a 21 anos', 2, 62),
-(144, 'Mateus bezerra da silva', 'Masculino', '22 a 26 anos', 2, 62),
-(145, 'Maria vitoria', 'Feminino', '18 a 21 anos', 1, 62),
-(146, 'Fabio Renato Marques severo ', 'Masculino', '22 a 26 anos', 3, 62),
-(147, 'Marcus ', 'Masculino', '27 a 35 anos', 2, 62),
-(148, 'Daniel Nunes', 'Masculino', '27 a 35 anos', 2, 62),
-(149, 'Manoely oliveira ', 'Feminino', '27 a 35 anos', 3, 62),
-(150, 'Michelly ', 'Feminino', '18 a 21 anos', 2, 62),
-(151, 'Carlos', 'Masculino', '18 a 21 anos', 3, 62),
-(152, 'Gabrielly oliveira', 'Feminino', '18 a 21 anos', 2, 62),
-(153, 'Fabíola Gomes de morais', 'Feminino', '18 a 21 anos', 2, 62),
-(154, 'Thaiany Emilly Burgo ver Lima ', 'Feminino', '22 a 26 anos', 3, 62),
-(155, 'V', 'Feminino', '22 a 26 anos', 2, 64),
-(156, 'Teste2', 'Masculino', 'menos de 18 anos', 3, 64),
-(157, 'Teste 2', 'Feminino', '27 a 35 anos', 3, 64),
-(158, 'Ritley Manoel', 'Masculino', '22 a 26 anos', 3, 68),
-(159, 'Michelly', 'Feminino', '18 a 21 anos', 4, 71),
-(160, 'Gislene', 'Feminino', '18 a 21 anos', 4, 71),
-(161, 'Laísa', 'Feminino', '18 a 21 anos', 4, 71),
-(162, 'Elisandra ', 'Feminino', 'mais de 35 anos', 4, 71),
-(163, 'Adriana ', 'Feminino', '27 a 35 anos', 4, 71),
-(164, 'Marinez', 'Feminino', 'mais de 35 anos', 2, 71),
-(165, 'Cleide Nunes da Silva ', 'Feminino', 'mais de 35 anos', 2, 71),
-(166, 'Pedro Felipe claudino Messias Rocha ', 'Masculino', '18 a 21 anos', 4, 71),
-(167, 'José Pedro Rick Alves  Cavalcante', 'Masculino', 'menos de 18 anos', 2, 71),
-(168, 'Luan Carlos da Costa Anjos', 'Masculino', '22 a 26 anos', 2, 71),
-(169, 'José de Sousa filho', 'Masculino', 'menos de 18 anos', 4, 71),
-(170, 'Lucas Siqueira Lopes', 'Masculino', '27 a 35 anos', 4, 71),
-(171, 'Carlos Alexsandro', 'Masculino', '18 a 21 anos', 4, 71),
-(172, 'Jacineide', 'Feminino', 'mais de 35 anos', 4, 71),
-(173, 'Lucas Silva ', 'Masculino', '22 a 26 anos', 4, 71),
-(174, 'Thomas Inácio Siqueira da Silva Filho', 'Masculino', '18 a 21 anos', 4, 71),
-(175, 'Magnum Vinícius ', 'Masculino', '18 a 21 anos', 4, 71),
-(176, 'Geraldo ', 'Masculino', 'mais de 35 anos', 3, 71),
-(177, 'José Danilo Oliveira do Nascimento', 'Masculino', '27 a 35 anos', 4, 71),
-(178, 'José deivid', 'Masculino', '18 a 21 anos', 4, 71),
-(179, 'Luiz carlos', 'Masculino', 'mais de 35 anos', 3, 71),
-(180, 'André Barbosa ', 'Masculino', '27 a 35 anos', 1, 71),
-(181, 'Fábio levi', 'Masculino', 'menos de 18 anos', 4, 71),
-(182, 'Renato cordeiro ', 'Masculino', '27 a 35 anos', 4, 71),
-(183, 'Ana', 'Feminino', '18 a 21 anos', 4, 71),
-(184, 'Kaique nunes', 'Masculino', '22 a 26 anos', 4, 71),
-(185, 'Alexandre Lima Ferreira Sabino', 'Masculino', '18 a 21 anos', 3, 71),
-(186, 'Elves felix', 'Masculino', '27 a 35 anos', 3, 71),
-(187, 'Eliton', 'Masculino', '18 a 21 anos', 4, 71),
-(188, 'Eliton', 'Masculino', '18 a 21 anos', 4, 71),
-(189, 'Tomé cordeiro da Silva ', 'Masculino', '18 a 21 anos', 2, 71),
-(190, 'Fernanda', 'Feminino', '18 a 21 anos', 4, 71),
-(191, 'Thauanni Vitória da Silva Moura Santos ', 'Feminino', '18 a 21 anos', 4, 71),
-(192, 'Maria Vitoria Amaral da Silva', 'Feminino', '18 a 21 anos', 4, 71),
-(193, 'Vitória Nayara ', 'Feminino', '22 a 26 anos', 4, 71),
-(194, 'Luciana cordeiro ', 'Feminino', '22 a 26 anos', 4, 71),
-(195, 'Ageu', 'Masculino', '18 a 21 anos', 4, 71),
-(196, 'Joergerson vladislon gouveia', 'Masculino', '22 a 26 anos', 2, 71),
-(197, 'Louie Marques Soares', 'Masculino', '18 a 21 anos', 4, 71),
-(198, 'Carlos Henrique de Queiroz Carvalho', 'Masculino', '18 a 21 anos', 4, 71),
-(199, 'Jallisson Silva Vieira', 'Masculino', '22 a 26 anos', 4, 71),
-(200, 'Iasmin', 'Feminino', '18 a 21 anos', 3, 71),
-(201, 'Marcelo de Sousa Nunes', 'Masculino', 'mais de 35 anos', 4, 71),
-(202, 'José Fabrício de Oliveira Braz ', 'Masculino', '18 a 21 anos', 4, 71);
+(109, 'Usuário Teste', 'Feminino', '18 a 21 anos', 1, 56);
 
 -- --------------------------------------------------------
 
@@ -458,19 +346,19 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `amostra`
 --
 ALTER TABLE `amostra`
-  MODIFY `id_amostra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id_amostra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de tabela `analise`
 --
 ALTER TABLE `analise`
-  MODIFY `id_analise` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id_analise` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT de tabela `analise_teste`
 --
 ALTER TABLE `analise_teste`
-  MODIFY `id_analise_teste` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_analise_teste` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `atributo_padrao`
@@ -482,7 +370,7 @@ ALTER TABLE `atributo_padrao`
 -- AUTO_INCREMENT de tabela `atributo_teste`
 --
 ALTER TABLE `atributo_teste`
-  MODIFY `id_atributo_teste` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_atributo_teste` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de tabela `ficha`

@@ -10,6 +10,7 @@ import { Analise } from 'src/modal/analise';
 import { Amostra } from 'src/modal/amostra';
 import { Ficha } from 'src/modal/ficha';
 import { Resposta } from 'src/modal/resposta';
+import { AnaliseTeste } from 'src/modal/analise_teste';
 @Component({
   selector: 'app-analise',
   templateUrl: './analise.page.html',
@@ -25,11 +26,11 @@ export class AnalisePage implements OnInit {
   amostras: Array<Amostra>;
   ficha: Ficha;
   respostas: Array<Resposta>;
-
+  testeIsolado: Array<AnaliseTeste> = [];
 
   allAnalises: Array<any>;
 
-  preferencia = 0;
+
   escalas: Array<any>
   escolherAnalise = true;
   instrucoes = false;
@@ -42,7 +43,7 @@ export class AnalisePage implements OnInit {
     this.ficha = new Ficha;
     this.ficha.faixa_etaria = '';
     this.ficha.genero = '';
-    this.ficha.frequencia_consumo = 0;    
+    this.ficha.frequencia_consumo = 0;
   }
 
   ngOnInit() {
@@ -82,25 +83,31 @@ export class AnalisePage implements OnInit {
     await this.analiseService.getRespostaByCodigo(this.codigo_analise).then(data => {
       this.amostras = data;
       console.log(this.amostras);
+      data[0]?.analise_teste.forEach(teste => {
+        if (teste.id_teste_padrao == 3 || teste.id_teste_padrao == 4) {
+          this.testeIsolado.push(teste);
+        }
+      });
       load.dismiss();
     }, (err) => {
       console.log(err);
-      this.presentAlert("Ocorreu um erro ao carregar os dadoss");
+      this.presentAlert("Ocorreu um erro ao carregar os dados");
     });
   }
 
 
   proximo(id: number, amostra?: number) {
+    console.log(this.amostras);
     switch (id) {
       case -2:
         var cont = 0;
-        /*this.respostas[0].preferencia.respostas.forEach((re) => {
+        this.testeIsolado[amostra].atributos.forEach((re) => {
           if (re.valor == 0) {
             cont += 1;
           }
-        })*/
+        });
         if (cont == 0) {
-          this.submit();
+          //this.submit();
         }
         else {
           this.presentAlert('Preencha todos os campos', ' ');
@@ -108,15 +115,15 @@ export class AnalisePage implements OnInit {
         break;
       case -1:
         var cont = 0;
-        /*this.respostas[0].amostras[amostra].escalas.forEach((am) => {
-          am.respostas.forEach((re) => {
-            if (re.valor == 0 && am.tipo != "preferencia") {
+        this.amostras[amostra].analise_teste.forEach((am) => {
+          am.atributos.forEach((re) => {
+            if (re.valor == 0 && am.fk_teste_padrao < 3) {
               cont += 1;
             }
           });
-        });*/
+        });
         if (cont == 0) {
-          this.submit();
+          //this.submit();
         }
         else {
           this.presentAlert('Preencha todos os campos', ' ');
@@ -133,13 +140,24 @@ export class AnalisePage implements OnInit {
         break;
       default:
         var cont = 0;
-        this.amostras[amostra].analise_teste.forEach((am) => {
-          am.atributos.forEach((re) => {
-            if (re.valor == 0 && am.fk_teste_padrao < 3) {
+
+        if (id > this.amostras.length + 1) {
+          this.testeIsolado[amostra].atributos.forEach((re) => {
+            if (re.valor == 0) {
               cont += 1;
             }
           });
-        });
+        }
+        else {
+          this.amostras[amostra].analise_teste.forEach((am) => {
+            am.atributos.forEach((re) => {
+              if (re.valor == 0 && am.fk_teste_padrao < 3) {
+                cont += 1;
+              }
+            });
+          });
+        }
+
         if (cont == 0) {
           console.log(id, this.amostras.length + 1)
           this.passos = { ...this.passos, id: id };

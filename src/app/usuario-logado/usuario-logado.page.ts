@@ -42,7 +42,7 @@ export class UsuarioLogadoPage implements OnInit {
     });
     load.present();
     await this.active.params.subscribe(async parms => {
-      await this.usuarioService.getById(parms["id_usuario"]).
+      await this.usuarioService.getById(parms["id_user"]).
         then(response => {
           this.usuario = response;          
           load.dismiss();
