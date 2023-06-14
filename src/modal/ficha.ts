@@ -6,5 +6,6 @@ export class Ficha {
     faixa_etaria: string;
     frequencia_consumo: number;
     genero: string;
+    fk_analise: number;
     respostas: Array<Resposta>;
 }

@@ -36,6 +36,8 @@ export class ListarRespostasPage implements OnInit {
   }
 
   segmentChanged(e) {
+    const div = <HTMLElement>document.getElementById("graficos");
+    div.innerHTML = '';
     if (this.segment == 1) {
       this.listarGraficos();
     }
@@ -58,7 +60,6 @@ export class ListarRespostasPage implements OnInit {
       await this.analiseService.listarResultados(params['id']).then(data => {
         this.amostras = data;
       }, err => {
-        console.log(err)
         this.presentAlert("Erro ao carregar os dados");
         this.navCtrl.back();
       })

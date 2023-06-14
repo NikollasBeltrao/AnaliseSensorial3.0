@@ -85,6 +85,12 @@ export class AnaliseService {
         });
     }
 
+    salvarRespostas(form) {
+        return new Promise<any>((resolve, reject) => {
+            this.http.post(this.server + "/analise.php", form).
+                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
+        });
+    }
 
 
 
@@ -112,10 +118,5 @@ export class AnaliseService {
     
    
 
-    saveRespostas(form) {
-        return new Promise<any>((resolve, reject) => {
-            this.http.post(this.server + "/analise/analise.php", form).
-                subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
-        });
-    }
+    
 }

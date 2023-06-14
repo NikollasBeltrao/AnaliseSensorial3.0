@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 13-Jun-2023 às 06:05
+-- Tempo de geração: 14-Jun-2023 às 06:14
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.4
 
@@ -169,7 +169,12 @@ CREATE TABLE `ficha` (
 
 INSERT INTO `ficha` (`id_ficha`, `nome_aluno`, `genero`, `faixa_etaria`, `frequencia_consumo`, `fk_analise`) VALUES
 (108, '', 'Feminino', '18 a 21 anos', 1, 56),
-(109, 'Usuário Teste', 'Feminino', '18 a 21 anos', 1, 56);
+(109, 'Usuário Teste', 'Feminino', '18 a 21 anos', 1, 56),
+(203, 'Nome teste', 'Masculino', '27 a 35 anos', 1, 77),
+(204, 'nikollas', 'Masculino', '18 a 21 anos', 2, 77),
+(205, '', 'Prefiro não responder', 'menos de 18 anos', 4, 77),
+(206, 'teste2', 'Prefiro não responder', 'mais de 35 anos', 4, 77),
+(207, 'nikollas', 'Masculino', 'menos de 18 anos', 1, 56);
 
 -- --------------------------------------------------------
 
@@ -180,7 +185,7 @@ INSERT INTO `ficha` (`id_ficha`, `nome_aluno`, `genero`, `faixa_etaria`, `freque
 CREATE TABLE `ficha_resposta` (
   `fk_atributo_teste` int(11) NOT NULL,
   `fk_ficha` int(11) NOT NULL,
-  `fk_amostra` int(11) NOT NULL,
+  `fk_amostra` int(11) DEFAULT NULL,
   `resposta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -204,7 +209,51 @@ INSERT INTO `ficha_resposta` (`fk_atributo_teste`, `fk_ficha`, `fk_amostra`, `re
 (2, 109, 30, 3),
 (1, 109, 31, 1),
 (3, 109, 31, 7),
-(4, 109, 31, 4);
+(4, 109, 31, 4),
+(6, 203, 46, 9),
+(5, 203, 46, 8),
+(7, 203, 46, 5),
+(6, 203, 47, 5),
+(5, 203, 47, 8),
+(7, 203, 47, 5),
+(10, 203, NULL, 435),
+(9, 203, NULL, 783),
+(8, 203, NULL, 435),
+(6, 204, 46, 4),
+(5, 204, 46, 7),
+(7, 204, 46, 3),
+(6, 204, 47, 1),
+(5, 204, 47, 3),
+(7, 204, 47, 1),
+(10, 204, NULL, 435),
+(9, 204, NULL, 783),
+(8, 204, NULL, 435),
+(6, 205, 46, 7),
+(5, 205, 46, 4),
+(7, 205, 46, 4),
+(6, 205, 47, 6),
+(5, 205, 47, 7),
+(7, 205, 47, 3),
+(10, 205, NULL, 435),
+(9, 205, NULL, 783),
+(8, 205, NULL, 783),
+(6, 206, 46, 1),
+(5, 206, 46, 2),
+(7, 206, 46, 3),
+(6, 206, 47, 4),
+(5, 206, 47, 5),
+(7, 206, 47, 5),
+(10, 206, NULL, 783),
+(9, 206, NULL, 435),
+(8, 206, NULL, 783),
+(3, 207, 30, 1),
+(4, 207, 30, 2),
+(1, 207, 30, 3),
+(2, 207, 30, 4),
+(3, 207, 31, 5),
+(4, 207, 31, 6),
+(1, 207, 31, 7),
+(2, 207, 31, 5);
 
 -- --------------------------------------------------------
 
@@ -376,7 +425,7 @@ ALTER TABLE `atributo_teste`
 -- AUTO_INCREMENT de tabela `ficha`
 --
 ALTER TABLE `ficha`
-  MODIFY `id_ficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
+  MODIFY `id_ficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
 
 --
 -- AUTO_INCREMENT de tabela `teste_padrao`

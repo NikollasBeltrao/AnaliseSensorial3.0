@@ -5,11 +5,9 @@ import { Router } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AnaliseService } from 'src/services/analise.service';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
-import { isEmptyObject } from 'jquery';
 import { Analise } from 'src/modal/analise';
 import { Amostra } from 'src/modal/amostra';
 import { Ficha } from 'src/modal/ficha';
-import { Resposta } from 'src/modal/resposta';
 import { AnaliseTeste } from 'src/modal/analise_teste';
 @Component({
   selector: 'app-analise',
@@ -25,13 +23,7 @@ export class AnalisePage implements OnInit {
   analise: Analise;
   amostras: Array<Amostra>;
   ficha: Ficha;
-  respostas: Array<Resposta>;
   testeIsolado: Array<AnaliseTeste> = [];
-
-  allAnalises: Array<any>;
-
-
-  escalas: Array<any>
   escolherAnalise = true;
   instrucoes = false;
   bgs = ['bg-azul', 'bg-laranja', 'bg-rosa', 'bg-amarelo'];
@@ -42,6 +34,7 @@ export class AnalisePage implements OnInit {
     this.analise = new Analise;
     this.amostras = [];
     this.ficha = new Ficha;
+    this.ficha.nome_aluno = '';
     this.ficha.faixa_etaria = '';
     this.ficha.genero = '';
     this.ficha.frequencia_consumo = 0;
@@ -70,6 +63,7 @@ export class AnalisePage implements OnInit {
     await this.analiseService.getAnaliseByCodigo(this.codigo_analise).then(data => {
       if (data) {
         this.analise = data;
+        this.ficha.fk_analise = data.id_analise;
         this.instrucoes = true;
         this.escolherAnalise = false;
       }
@@ -78,12 +72,12 @@ export class AnalisePage implements OnInit {
       }
       load.dismiss();
     }, (err) => {
+      load.dismiss();
       this.presentToast("Ocorreu um erro ao carregar os dados");
     });
 
     await this.analiseService.getRespostaByCodigo(this.codigo_analise).then(data => {
       this.amostras = data;
-      console.log(this.amostras);
       data[0]?.analise_teste.forEach(teste => {
         if (teste.id_teste_padrao == 3 || teste.id_teste_padrao == 4) {
           this.testeIsolado.push(teste);
@@ -91,7 +85,7 @@ export class AnalisePage implements OnInit {
       });
       load.dismiss();
     }, (err) => {
-      console.log(err);
+      load.dismiss();
       this.presentToast("Ocorreu um erro ao carregar os dados");
     });
   }
@@ -101,13 +95,14 @@ export class AnalisePage implements OnInit {
     switch (id) {
       case -2:
         var cont = 0;
-        this.testeIsolado[amostra-1].atributos.forEach((re) => {
+        this.testeIsolado[amostra - 1].atributos.forEach((re) => {
           if (re.valor == 0) {
             cont += 1;
           }
         });
         if (cont == 0) {
-          //this.submit();
+          console.log(this.amostras, this.testeIsolado, this.ficha);
+          this.submit();
         }
         else {
           this.presentToast('Preencha todos os campos');
@@ -123,7 +118,7 @@ export class AnalisePage implements OnInit {
           });
         });
         if (cont == 0) {
-          //this.submit();
+          this.submit();
         }
         else {
           this.presentToast('Preencha todos os campos');
@@ -179,7 +174,6 @@ export class AnalisePage implements OnInit {
           text: 'Ok',
           cssClass: 'alertBtn',
           handler: () => {
-            console.log('ok');
           }
         }
       ],
@@ -202,10 +196,12 @@ export class AnalisePage implements OnInit {
       err: ''
     }
     this.analise = new Analise;
-    this.allAnalises = [];
     this.amostras = [];
-    this.escalas = [];
-    this.respostas = [];
+    this.testeIsolado = [];
+    this.ficha = new Ficha;
+    this.ficha.faixa_etaria = '';
+    this.ficha.genero = '';
+    this.ficha.frequencia_consumo = 0;
   }
 
 
@@ -215,15 +211,18 @@ export class AnalisePage implements OnInit {
     });
     load.present();
     let form = new FormData();
-    form.append("saveRespostas", (JSON.stringify(this.respostas[0])));
-    await this.analiseService.saveRespostas(form).then(res => {
-      load.dismiss();
+    form.append("amostras", (JSON.stringify(this.amostras)));
+    form.append("testeIsolado", (JSON.stringify(this.testeIsolado)));
+    form.append("ficha", (JSON.stringify(this.ficha)));
+    form.append("salvarRespostas", "salvarRespostas");
+    await this.analiseService.salvarRespostas(form).then(res => {
       this.presentAlert("Obrigado por participar da pesquisa !!! 😉", ' ');
       this.sair();
+      load.dismiss();
     }, (err) => {
+      console.log(err);
       load.dismiss();
       this.presentToast("Ocorreu um erro ao salvar os dados");
-      console.log(err)
     });
   }
 

@@ -13,6 +13,8 @@ switch ($method) {
             cadastrarAnalise();
         } else if (isset($_POST['criarAmostra'])) {
             criarAmostra();
+        } else if (isset($_POST['salvarRespostas'])) {
+            salvarRespostas();
         }
         break;
     case 'GET':
@@ -39,6 +41,54 @@ switch ($method) {
     default:
         echo '{"error": "Método inválido"}';
         break;
+}
+
+function salvarRespostas()
+{
+    try {
+        $ficha = json_decode($_POST['ficha']);
+        $bdpdo = BDPDO::getInstancia();
+        $query = $bdpdo->prepare("INSERT INTO ficha (nome_aluno, genero, faixa_etaria, frequencia_consumo, fk_analise) 
+        VALUES (?, ?, ?, ?, ?)");
+        $query->bindValue(1, $ficha->nome_aluno);
+        $query->bindValue(2, $ficha->genero);
+        $query->bindValue(3, $ficha->faixa_etaria);
+        $query->bindValue(4, $ficha->frequencia_consumo);
+        $query->bindValue(5, $ficha->fk_analise);
+        $query->execute();
+        $id_ficha = $bdpdo->lastInsertId();
+        foreach (json_decode($_POST['amostras']) as $amostra) {
+            foreach ($amostra->analise_teste as $teste) {
+                if ($teste->id_teste_padrao != 4 && $teste->id_teste_padrao != 3) {
+                    foreach ($teste->atributos as $atributo) {
+                        $bdpdo = BDPDO::getInstancia();
+                        $query = $bdpdo->prepare("INSERT INTO ficha_resposta (fk_atributo_teste, fk_ficha, fk_amostra, resposta)
+                        VALUES (?, ?, ?, ?)");
+                        $query->bindValue(1, $atributo->id_atributo_teste);
+                        $query->bindValue(2, $id_ficha);
+                        $query->bindValue(3, $amostra->id_amostra);
+                        $query->bindValue(4, $atributo->valor);
+                        $query->execute();
+                    }
+                }
+            }
+        }
+        foreach (json_decode($_POST['testeIsolado']) as $teste) {
+            if ($teste->id_teste_padrao == 4 || $teste->id_teste_padrao == 3) {
+                foreach ($teste->atributos as $atributo) {
+                    $bdpdo = BDPDO::getInstancia();
+                    $query = $bdpdo->prepare("INSERT INTO ficha_resposta (fk_atributo_teste, fk_ficha, resposta)
+                        VALUES (?, ?, ?)");
+                    $query->bindValue(1, $atributo->id_atributo_teste);
+                    $query->bindValue(2, $id_ficha);
+                    $query->bindValue(3, $atributo->valor);
+                    $query->execute();
+                }
+            }
+        }
+    } catch (Exception $e) {
+        echo ('{"err": "' . $e . '"}');
+    }
 }
 
 function criarAmostra()
@@ -300,7 +350,8 @@ function listarResultados()
                         JOIN analise_teste AS ant ON ant.id_analise_teste = at.fk_analise_teste
                         WHERE fr.fk_ficha = " . $linha_fichas["id_ficha"] .
                         " AND fr.fk_amostra = " . $linha_amostra["id_amostra"] .
-                        " AND ant.fk_teste_padrao = " . $linha_testes["id_teste_padrao"];
+                        " AND ant.fk_teste_padrao = " . $linha_testes["id_teste_padrao"]. 
+                        " ORDER BY ap.ordem_atributo";
                     $p_sql3 = $bdpdo->prepare($sql);
                     $p_sql3->execute();
                     $linha_respostas = $p_sql3->fetch(PDO::FETCH_ASSOC);
