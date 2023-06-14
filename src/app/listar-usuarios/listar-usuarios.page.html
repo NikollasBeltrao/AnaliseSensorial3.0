@@ -1,13 +1,10 @@
 <ion-header>
-    <ion-toolbar id="head" color="secondary">
-        <ion-buttons slot="start">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="secondary">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <form (ngSubmit)="search()" [formGroup]="searchInp">
-            <ion-searchbar type="text" placeholder="Search" formControlName="search" (keyup)="search()" aria-label="Search">
-            </ion-searchbar>
-        </form>
-        <ion-buttons slot="end">
+        <ion-title>Usuários</ion-title>
+        <ion-buttons slot="primary">
             <ion-button (click)="goHome()">
                 <ion-icon class="icon-bar" name="home-outline"></ion-icon>
             </ion-button>
@@ -24,7 +21,8 @@
 
 <ion-content id="cont">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Carregando...">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+            refreshingSpinner="circles" refreshingText="Carregando...">
         </ion-refresher-content>
     </ion-refresher>
     <div>
@@ -32,14 +30,14 @@
         <ul *ngFor="let user of listUsers; let i = index" class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center {{bgs[bg(i)]}}">
                 <div>
-                    <strong>{{user.nome_user}} </strong><span class="mat"> {{user.matricula_user}}</span>
+                    <strong>{{user.nome_usuario}} </strong><span class="mat"> {{user.login}}</span>
                     <br>
                     <small>{{user.permissoes >= 2 ? 'Professor' : 'Estudante'}}</small>
                 </div>
                 <div>
-                    <button *ngIf="user.permissoes < 2" (click)="deletar(user.id_user)">
+                    <button *ngIf="user.permissoes < 2" (click)="deletar(user.id_usuario)">
                         <ion-icon name="close-circle"></ion-icon>
-          </button>
+                    </button>
                 </div>
             </li>
         </ul>

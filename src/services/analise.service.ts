@@ -13,8 +13,8 @@ export class AnaliseService {
     constructor(private http: HttpClient) { }
 
     listarResultados(id) {
-        return new Promise<Amostra[]>((resolve, reject) => {
-            this.http.get<Amostra[]>(this.server + "/analise.php", { params: { listarResultados: id } }).
+        return new Promise<any>((resolve, reject) => {
+            this.http.get(this.server + "/analise.php", { params: { listarResultados: id } }).
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }

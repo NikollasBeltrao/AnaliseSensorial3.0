@@ -8,6 +8,7 @@ import { Chart, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Analise } from 'src/modal/analise';
 import { Amostra } from 'src/modal/amostra';
+import { AnaliseTeste } from 'src/modal/analise_teste';
 
 @Component({
   selector: 'app-listar-respostas',
@@ -17,11 +18,13 @@ import { Amostra } from 'src/modal/amostra';
 export class ListarRespostasPage implements OnInit {
   analise: Analise;
   amostras: Array<Amostra>;
+  testesIsolados: Array<AnaliseTeste>;
   constructor(private analiseService: AnaliseService, private active: ActivatedRoute, private route: Router,
     private photoViewer: PhotoViewer, public loading: LoadingController, public alertController: AlertController,
     private navCtrl: NavController, private nativePageTransitions: NativePageTransitions) {
     Chart.register(...registerables);
     this.amostras = [];
+    this.testesIsolados = [];
     this.analise = new Analise();
   }
   barchar: any;
@@ -58,7 +61,8 @@ export class ListarRespostasPage implements OnInit {
       })
 
       await this.analiseService.listarResultados(params['id']).then(data => {
-        this.amostras = data;
+        this.amostras = data[0];
+        this.testesIsolados = data[1];
       }, err => {
         this.presentAlert("Erro ao carregar os dados");
         this.navCtrl.back();
@@ -78,28 +82,45 @@ export class ListarRespostasPage implements OnInit {
     await this.active.params.subscribe(async params => {
       this.idUser = params['id_user'];
       await this.analiseService.listarGraficos(params['id']).then(data => {
+        console.log(data)
         data.forEach((teste) => {
           teste.atributos.forEach((atributo) => {
 
-            atributo.amostras.forEach((amostra) => {
-              var dataHed = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-              var dataCom = [0, 0, 0, 0, 0];
-              var dataGrafico = [];
-              amostra.respostas.forEach((res) => {
-                if (teste.nome_teste == "Escala Hedônica") {
-                  dataHed[parseInt(res.resposta) - 1] = parseInt(res.count);
-                  dataGrafico = dataHed;
-                }
-                else if (teste.nome_teste == "Atitude de Compra") {
-                  dataCom[parseInt(res.resposta) - 1] = parseInt(res.count);
-                  dataGrafico = dataCom;
-                }
+            if (atributo.amostras) {
+              atributo.amostras.forEach((amostra) => {
+                var dataHed = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var dataCom = [0, 0, 0, 0, 0];
+                var dataGrafico = [];
+                amostra.respostas.forEach((res) => {
+                  if (teste.nome_teste == "Escala Hedônica") {
+                    dataHed[parseInt(res.resposta) - 1] = parseInt(res.count);
+                    dataGrafico = dataHed;
+                  }
+                  else if (teste.nome_teste == "Atitude de Compra") {
+                    dataCom[parseInt(res.resposta) - 1] = parseInt(res.count);
+                    dataGrafico = dataCom;
+                  }
+                })
+
+                this.gerarGrafico(teste.nome_teste,
+                  dataGrafico,
+                  (teste.nome_teste + " - Amos: " + amostra.numero_amostra + " - Atr: " + atributo.nome_atributo),
+                  this.bgs[0])
               })
+            }
+            else {
+              var dataGrafico = [];
+              var dataLabel = [];
+              atributo.respostas.forEach((res) => {
+                dataGrafico.push(parseInt(res.count));
+                dataLabel.push(res.resposta);              
+              })
+
               this.gerarGrafico(teste.nome_teste,
                 dataGrafico,
-                (teste.nome_teste + " - Amos: " + amostra.numero_amostra + " - Atr: " + atributo.nome_atributo),
-                this.bgs[0])
-            })
+                (teste.nome_teste + " - Atr: " + atributo.nome_atributo),
+                this.bgs[1], dataLabel)
+            }
           })
         })
       }, err => {
@@ -121,7 +142,12 @@ export class ListarRespostasPage implements OnInit {
 
   doRefresh(event) {
     setTimeout(() => {
-      this.carregarRespostas();
+      if (this.segment == 1) {
+        this.listarGraficos();
+      }
+      else {
+        this.carregarRespostas();
+      }
       event.target.complete();
     }, 2000);
   }
@@ -189,10 +215,10 @@ export class ListarRespostasPage implements OnInit {
     h2.style.fontSize = '18px';
     h2.style.fontWeight = 'bold';
     h2.style.border = 'solid 1px gray';
-    h2.style.borderBottom = 'none';   
+    h2.style.borderBottom = 'none';
     div2.style.margin = "20px";
     div2.style.width = "90%";
-    div2.style.maxWidth = "600px";    
+    div2.style.maxWidth = "600px";
     div2.appendChild(h2);
     ctx.height = 400;
     ctx.width = 400;
@@ -258,7 +284,7 @@ export class ListarRespostasPage implements OnInit {
         }
       },
     });
-    div2.appendChild(ctx);    
+    div2.appendChild(ctx);
     div.appendChild(div2);
   }
 }

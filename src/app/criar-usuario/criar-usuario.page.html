@@ -1,9 +1,9 @@
 <ion-header>
-    <ion-toolbar color="secondary">
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Novo Pesquisador</ion-title>
+        <ion-title slot="">Novo Usuário</ion-title>
         <ion-buttons slot="end">
             <ion-button *ngIf="this.tipo_user === '2'" (click)="goHome()">
                 <ion-icon class="icon-bar" name="home-outline"></ion-icon>
@@ -49,9 +49,7 @@
                     <option value="2">2 - Professor/Administrador (Criar, Visualiar, Editar)</option>
                 </select>
             </div>
-            <div class="form-group">
-                <small *ngIf="fGroup.invalid && submerter" id="err" class="form-text text-muted red">*Preencha todods os
-                    campos</small>
+            <div class="form-group">                
                 <button class="btn" type="submit">Cadastrar</button>
             </div>
         </form>

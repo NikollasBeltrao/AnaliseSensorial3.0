@@ -56,7 +56,6 @@ export class ListarUsuariosPage implements OnInit {
       await this.usuarioService.getAllUsers().
         then(res => {
           this.listUsers = res;
-          console.log(res);
         });
     });
     load.dismiss();

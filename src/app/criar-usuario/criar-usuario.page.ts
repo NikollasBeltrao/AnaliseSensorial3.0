@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { UsuarioService } from 'src/services/usuario.service';
 
 @Component({
@@ -17,7 +17,8 @@ export class CriarUsuarioPage implements OnInit {
   tipo_user;
   id_user;
   constructor(public active: ActivatedRoute, public formBuilder: FormBuilder, private route: Router,
-     public loading: LoadingController, public usuarioService: UsuarioService,  private nativePageTransitions: NativePageTransitions) {
+    public loading: LoadingController, public usuarioService: UsuarioService, 
+    private nativePageTransitions: NativePageTransitions, public toastController: ToastController) {
     this.fGroup = this.formBuilder.group({
       nome: new FormControl('', Validators.required),
       matricula: new FormControl('', Validators.required),
@@ -33,34 +34,38 @@ export class CriarUsuarioPage implements OnInit {
       this.tipo_user = parms['tipo_user'];
     });
   }
-  validarSenha(){
-    if(this.fGroup.value.senha != this.fGroup.value.rsenha){
+  validarSenha() {
+    if (this.fGroup.value.senha != this.fGroup.value.rsenha) {
       this.senhaInvalida = true;
       return false;
     }
     this.senhaInvalida = false;
     return true;
   }
-  submit(){
-    
+  submit() {
+
     this.submerter = true;
-    if(this.validarSenha && this.fGroup.valid){
+    if (this.validarSenha && this.fGroup.valid) {
       var form = new FormData();
       form.append('nome', this.fGroup.value.nome);
       form.append('matricula', this.fGroup.value.matricula);
-      form.append('senha', this.fGroup.value.senha);      
+      form.append('senha', this.fGroup.value.senha);
       form.append('permissoes', this.fGroup.value.permissoes);
       this.usuarioService.createUser(form).then(res => {
-        console.log(JSON.parse(res));
-        if(JSON.parse(res).response){
-          alert("Pesquisador criado com sucesso");
+        if (JSON.parse(res).response) {
+          this.presentToast("Pesquisador criado com sucesso", "success");
+          this.fGroup.reset();
         }
-        else if (JSON.parse(res).err){
-          alert('Não foi possível completar a ação');
+        else if (JSON.parse(res).err) {
+          this.presentToast('Não foi possível completar a ação', "danger");
         }
-      }, (err) =>{
-        alert('Não foi possível completar a ação');
+      }, (err) => {
+        this.presentToast('Não foi possível completar a ação', "danger");
       });
+    }
+    else {
+      this.presentToast('Preencha todos os campos', "danger");
+
     }
   }
   goHome() {
@@ -90,5 +95,14 @@ export class CriarUsuarioPage implements OnInit {
     }
     this.nativePageTransitions.slide(options)
       .catch(console.error);
+  }
+
+  async presentToast(menssagem: string, color: string) {
+    const toast = await this.toastController.create({
+      message: menssagem,
+      duration: 2000,
+      color: color
+    });
+    toast.present();
   }
 }

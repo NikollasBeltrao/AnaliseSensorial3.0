@@ -18,7 +18,7 @@ export class UsuarioService {
 
     getById(id) {
         return new Promise<Usuario>((resolve, reject) => {
-            this.http.get<Usuario>(this.server + "/usuario.php", { params: { getById: <string>id } }).
+            this.http.get<Usuario>(this.server + "/usuario.php", { params: { getById: id } }).
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }
@@ -35,13 +35,13 @@ export class UsuarioService {
 
     getAllUsers() {
         return new Promise<any>((resolve, reject) => {
-            this.http.get(this.server + "/usuario/usuario.php", { params: { getAll: "all" } }).
+            this.http.get(this.server + "/usuario.php", { params: { getAll: "all" } }).
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }
     getSearch(param) {
         return new Promise<any>((resolve, reject) => {
-            this.http.post(this.server + "/usuario/usuario.php", param).
+            this.http.post(this.server + "/usuario.php", param).
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }
@@ -49,14 +49,14 @@ export class UsuarioService {
     createUser(form) {
         form.append('createUser', "createUser");
         return new Promise<any>((resolve, reject) => {
-            this.http.post(this.server + "/usuario/usuario.php", form).
+            this.http.post(this.server + "/usuario.php", form).
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }
     alterUser(form) {
         form.append('alterUser', "alterUser");
         return new Promise<any>((resolve, reject) => {
-            this.http.post(this.server + "/usuario/usuario.php", form).
+            this.http.post(this.server + "/usuario.php", form).
                 subscribe(snapshots => { resolve(snapshots); }, err => { reject(err) })
         });
     }
