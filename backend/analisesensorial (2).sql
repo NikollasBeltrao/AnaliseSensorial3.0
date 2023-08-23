@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14-Jun-2023 às 06:14
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.4
+-- Tempo de geração: 14-Jun-2023 às 18:06
+-- Versão do servidor: 10.4.24-MariaDB
+-- versão do PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -297,28 +297,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `login`, `senha`, `permissoes`, `nome_usuario`) VALUES
-(1, '2020ADM', 'admin', 2, 'Admin'),
-(2, '20201AF0318', '1234', 1, 'Nikollas Victor'),
-(3, '20201AF0543', '1234', 1, 'Aluno Teste'),
-(14, '2020Aluno', '1234', 1, 'Usuário Teste'),
-(15, '2021', '1224', 1, 'Vitória'),
-(16, 'al', '1234', 1, 'Fulano'),
-(17, '1234', '1234', 1, 'Diego'),
-(18, '20191lcaf0319', 'Senha', 1, 'Vitória '),
-(19, '20191lcaf0408', 'lhans123', 1, 'Luís Henrique de Araújo Nunes Silva '),
-(20, '20191lcaf0408', 'luis2000', 1, 'Luís Henrique de Araújo Nunes Silva '),
-(21, '20191lcaf0092', 'Careca', 1, 'Vitório David '),
-(22, '20191lcaf0408', 'luis2000', 1, 'Luís Henrique de Araújo Nunes Silva '),
-(23, '20191LCAF0351', '#96153254', 1, 'Severino Neto'),
-(24, '20211lcaf0280', '2019', 1, 'Maria Isabela '),
-(25, '20211lcaf0280', '2019', 1, 'Maria Isabela '),
-(26, '20211LCAF0221', 'Amor12345', 1, 'Thiago veras da silva'),
-(27, '20211LCAF0221', 'Amor12345', 1, 'Thiago veras da silva'),
-(28, '20191lcaf0483', '123654789', 1, 'Rennan Messias Alves de Queiroz Lopes '),
-(29, '54321', '1234', 1, 'Teste'),
-(30, '54321', '1234', 1, 'Teste'),
-(31, 'Vitória ', 'senha', 1, 'Vitoria'),
-(32, 'adm', 'admin', 1, 'Ritley Manoel');
+(1, '2020ADM', 'admin', 2, 'Admin');
 
 --
 -- Índices para tabelas despejadas
@@ -437,7 +416,7 @@ ALTER TABLE `teste_padrao`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Restrições para despejos de tabelas

@@ -71,7 +71,7 @@ export class UsuarioLogadoPage implements OnInit {
   listarUsuarios() {
     this.backButtonSubscription.unsubscribe();
     this.nextPage();
-    this.route.navigate(["listar-usuarios", { id_usuario: this.usuario.id_usuario }]);
+    this.route.navigate(["listar-usuarios", { id_user: this.usuario.id_usuario }]);
   }
 
   listarAnalises() {
@@ -88,7 +88,7 @@ export class UsuarioLogadoPage implements OnInit {
   cadastrarUsuario() {
     this.backButtonSubscription.unsubscribe();
     this.nextPage();
-    this.route.navigate(["criar-usuario", { id_usuario: this.usuario.id_usuario, tipo_user: 2 }]);
+    this.route.navigate(["criar-usuario", { id_user: this.usuario.id_usuario, tipo_user: 2 }]);
   }
   sair() {
     this.backButtonSubscription.unsubscribe();
@@ -103,7 +103,7 @@ export class UsuarioLogadoPage implements OnInit {
   goPerfil() {
     this.backButtonSubscription.unsubscribe();
     this.nextPage();
-    this.route.navigate(["perfil", { id_usuario: this.usuario.id_usuario }]);
+    this.route.navigate(["perfil", { id_user: this.usuario.id_usuario }]);
   }
 
   async presentAlert(message) {

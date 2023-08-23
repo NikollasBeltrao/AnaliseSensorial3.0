@@ -18,6 +18,11 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+            refreshingSpinner="circles" refreshingText="Carregando...">
+        </ion-refresher-content>
+    </ion-refresher>
     <div class="list-group-item flex-column align-items-start topo-analise">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1"><strong>{{analise.nome_alimento}}</strong></h5>
@@ -39,47 +44,45 @@
         </ion-segment-button>
     </ion-segment>
     <div *ngIf="segment == 0">
-        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-            <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
-                refreshingSpinner="circles" refreshingText="Carregando...">
-            </ion-refresher-content>
-        </ion-refresher>
 
         <ul class="list-group lista-analises">
-            <!--<div class="card" *ngIf="this.preferencia != 0">
-            <li class="list-group-item {{bgs[bg(0)]}}">{{preferencianalise.nome_escala}}</li>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Faixa etária</th>
-                            <th scope="col">Gênero</th>
-                            <th scope="col">Consumo</th>
-                            <th scope="col" *ngFor=" let atributo of preferencianalise.atributos">
-                                {{atributo.nome_atributo}}
-                            </th>
-                        </tr>
+            <!--Testes isolados-->
+            <div class="card" *ngFor=" let analise_teste of testesIsolados; let i = index">
+                <li class="list-group-item {{bgs[bg(i)]}}">{{analise_teste.nome_teste}}</li>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Faixa etária</th>
+                                <th scope="col">Gênero</th>
+                                <th scope="col">Consumo</th>
+                                <th scope="col" *ngFor=" let atributo of analise_teste.fichas[0]?.respostas">
+                                    {{atributo.nome_atributo}}
+                                </th>
+                            </tr>
 
-                    </thead>
-                    <tbody>
-                        <tr *ngFor=" let escalaR of preferencianalise.escala_resposta; let contador = index">
-                            <th scope="row">{{contador+1}}</th>
-                            <td>{{escalaR.nome_aluno}}</td>
-                            <td>{{escalaR.faixa_etaria}}</td>
-                            <td>{{escalaR.genero}}</td>
-                            <td>{{escalaR.frequencia_consumo}}</td>
-                            <td *ngFor=" let resposta of escalaR.respostas">{{respostanalise.valor_resposta}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor=" let ficha of analise_teste.fichas; let contador2 = index">
+                                <th scope="row">{{contador2+1}}</th>
+                                <td>{{ficha.nome_aluno}}</td>
+                                <td>{{ficha.faixa_etaria}}</td>
+                                <td>{{ficha.genero}}</td>
+                                <td>{{ficha.frequencia_consumo}}</td>
+                                <td *ngFor=" let resposta of ficha.respostas">{{resposta.resposta}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>-->
+            <!--Amostras-->
             <div class="card" *ngFor=" let amostra of amostras; let i = index">
                 <li class="list-group-item {{bgs[bg(i)]}}">Amostra {{amostra.numero_amostra}}</li>
-                <img *ngIf="amostra.img_amostra" class="card-img-top" src={{amostra.img_amostra}} onError="this.src='../assets/default.png'"
-                    alt="Card image cap" (click)="imgFull(amostra.img_amostra)">
+                <img *ngIf="amostra.img_amostra" class="card-img-top" src={{amostra.img_amostra}}
+                    onError="this.src='../assets/default.png'" alt="Card image cap"
+                    (click)="imgFull(amostra.img_amostra)">
                 <ul class="card-body">
                     <li><strong>Número: </strong> {{amostra.numero_amostra}}</li>
                     <li><strong>Ingredientes: </strong>{{amostra.ingredientes}}</li>
