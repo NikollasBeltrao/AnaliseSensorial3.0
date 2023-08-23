@@ -49,11 +49,11 @@
                 <button id="bt" class="mais" (click)="goToRespostas(a.id_analise)">
           <ion-icon class="bt" name="ellipsis-vertical"></ion-icon>
         </button>
-                <p class="titulo"><strong>{{a.titulo_analise}}</strong></p>
+                <p class="titulo"><strong>{{a.nome_alimento}}</strong></p>
 
 
-                <strong>{{a.nome_user}} - </strong>
-                <small>{{a.matricula_user}}</small>
+                <strong>{{a.nome_usuario}} - </strong>
+                <small>{{a.login}}</small>
                 <div class="switch__container">
                     <input id="{{a.id_analise}}" class="switch switch--shadow" type="checkbox" [checked]="a.status == 1 ? true : false " (click)="switch($event, a.id_analise)" />
                     <label for="{{a.id_analise}}"></label>

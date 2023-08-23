@@ -95,10 +95,10 @@
 
             <div class="col-12">
               <label nfIf="" for="validationTooltip02">Com que frequência você consome
-                {{analise.titulo_analise ? analise.titulo_analise : 'undefined' }} ?</label>
+                {{analise.nome_alimento ? analise.nome_alimento : 'undefined' }} ?</label>
               <select class="custom-select" [(ngModel)]="ficha.frequencia_consumo" name="consumo">
                 <option value="0">Selecione a frequência você consome
-                  {{analise.titulo_analise ? analise.titulo_analise : 'undefined' }}</option>
+                  {{analise.nome_alimento ? analise.nome_alimento : 'undefined' }}</option>
                 <option value="1">Diariamente</option>
                 <option value="2">1 vez na semana</option>
                 <option value="3">Mensalmente</option>

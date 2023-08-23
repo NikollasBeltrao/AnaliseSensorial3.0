@@ -32,7 +32,7 @@
         <ul *ngFor="let user of listUsers; let i = index" class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center {{bgs[bg(i)]}}">
                 <div>
-                    <strong>{{user.nome_user}} </strong><span class="mat"> {{user.matricula_user}}</span>
+                    <strong>{{user.nome_usuario}} </strong><span class="mat"> {{user.login}}</span>
                     <br>
                     <small>{{user.permissoes >= 2 ? 'Professor' : 'Estudante'}}</small>
                 </div>
