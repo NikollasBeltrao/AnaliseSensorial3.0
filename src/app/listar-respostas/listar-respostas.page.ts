@@ -82,7 +82,6 @@ export class ListarRespostasPage implements OnInit {
     await this.active.params.subscribe(async params => {
       this.idUser = params['id_user'];
       await this.analiseService.listarGraficos(params['id']).then(data => {
-        console.log(data)
         data.forEach((teste) => {
           teste.atributos.forEach((atributo) => {
 
