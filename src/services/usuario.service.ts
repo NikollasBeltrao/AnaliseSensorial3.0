@@ -6,7 +6,7 @@ import { Usuario } from 'src/modal/usuario';
     providedIn: 'root'
 })
 export class UsuarioService {
-    private server = "http://localhost/analisesensorial/";
+    private server = "https://analise-sensorial-ifpe.000webhostapp.com/analisesensorial/";
     constructor(private http: HttpClient) { }
 
     auth(login) {

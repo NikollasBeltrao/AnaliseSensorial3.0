@@ -9,7 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
     providedIn: 'root'
 })
 export class AnaliseService {
-    private server = "http://localhost/analisesensorial/";
+    private server = "https://analise-sensorial-ifpe.000webhostapp.com/analisesensorial/";
     constructor(private http: HttpClient) { }
 
     listarResultados(id) {
